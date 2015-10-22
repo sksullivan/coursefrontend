@@ -11,3 +11,5 @@ RUN cp coursefrontend/nginx.conf /etc/nginx/
 RUN npm install -g bower
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN cd coursefrontend && bower install --allow-root --config.interactive=false
+
+ENTRYPOINT service nginx start
