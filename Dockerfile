@@ -8,3 +8,5 @@ RUN mkdir -p /data/db
 
 RUN git clone https://github.com/sksullivan/coursefrontend
 RUN cp coursefrontend/nginx.conf /etc/nginx/
+
+ENTRYPOINT nginx
