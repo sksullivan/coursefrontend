@@ -6,5 +6,5 @@ RUN npm install -g bower
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 COPY . /usr/share/nginx/html
-
-RUN cd /usr/share/nginx/html && bower install /usr/share/nginx/html/ --allow-root --config.interactive=false
+RUN cd /usr/share/nginx/html && bower install --allow-root --config.interactive=false
+COPY nginx.conf /etc/nginx/nginx.conf
