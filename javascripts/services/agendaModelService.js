@@ -10,6 +10,7 @@
 
         ams.init = function () {
             ams.courseSeriesIndexMap = {};
+            ams.sectionSeriesIndexMap = {};
             ams.operationList = [];
         };
 
@@ -17,6 +18,9 @@
             if (operation.type == "add") {
                 return {success: true};
             } else if (operation.type == "remove") {
+                if (ams.courseSeriesIndexMap[operation.section.courseName] === undefined) {
+                    return {success: false, err: "DOES_NOT_EXIST"};
+                }
                 return {success: true};
             } else {
                 return {success: false, err: "DUPLICATE"};
@@ -45,24 +49,28 @@
                 for (var day of operation.section.days) {
                     newSeries.push(ams.seriesPointForSectionDay(operation.section,day));
                 }
+                console.log(newSeries);
                 if (ams.courseSeriesIndexMap[operation.section.courseName] === undefined) {
                     seriesData.push(newSeries);
                     ams.courseSeriesIndexMap[operation.section.courseName] = seriesData.indexOf(newSeries);
+                    // ams.courseSeriesIndexMap[operation.section.courseName] = seriesData.indexOf(newSeries);
                 } else {
                     for (var seriesPoint of newSeries) {
                         seriesData[ams.courseSeriesIndexMap[operation.section.courseName]].push(seriesPoint);
                     }
                 }
+            } else if (operation.type == "remove") {
+                // ams.courseSeriesIndexMap[operation.section.courseName]
             }
         }
 
         ams.seriesPointForSectionDay = function (section, day) {
             return {
                 x: day,
-                y: ams.maxHour24 - section.startHour + ams.minHour24,
+                y: section.startMoment.hours(),
                 name: section.name,
                 courseName: section.courseName,
-                decimalHours: section.decimalHours
+                decimalHours: (section.endMoment.unix() - section.startMoment.unix())/3600.0
             }
         }
 

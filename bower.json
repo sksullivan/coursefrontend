@@ -9,7 +9,8 @@
     "bootstrap": "latest",
     "jquery-ui": "*",
     "angular-filter": "~0.5.7",
-    "angular-chartist.js": "~3.3.9"
+    "angular-chartist.js": "~3.3.9",
+    "moment": "~2.10.6"
   },
   "resolutions": {
     "angular": ">=1.3",

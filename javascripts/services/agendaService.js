@@ -44,6 +44,21 @@
                     return false;
                 });
             };
+
+            agenda.removeSeriesForSection = function (section) {
+                AgendaModelService.mutateSchedule({
+                    type: "remove",
+                    section: section,
+                },
+                agenda.chartData.series,
+                function (err) {
+                    if (err == "DOES_NOT_EXIST") {
+                        alert("We couldn't find the class you're trying to remove.");
+                        return true;
+                    }
+                    return false;
+                });
+            };
         }
 
         as.initChartData = function () {
