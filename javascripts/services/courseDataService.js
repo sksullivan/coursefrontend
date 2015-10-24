@@ -10,51 +10,76 @@
         console.log("Loaded course data service.");
 
         cds.init = function () {
-            cds.mostRecentValidTermName = "FA15_1";
+            cds.timeFormat = "hh:mm a";
         }
 
         cds.getCourses = function (processCourses, processErr) {
-            $http.get('/courses.json').then(function (courses) {
-                processCourses(courses.data);
+            $http.get('/api/all').then(function (courses) {
+                processCourses(cds.formatCourseArray(courses.data));
             }, function (err) {
                 processErr(err);
             });
         };
 
-        cds.getMostRecentValidTerm = function (processTerm, processErr) {
-            $http.get('/terms.json').then(function (terms) {
-                for (var term of terms.data) {
-                    if (term.name == cds.mostRecentValidTermName) {
-                        processTerm(term);
-                        return;
-                    }
+        cds.formatCourseArray = function (courses) {
+            var formattedCourses = []
+            var i = 0;
+            for (var course of courses) {
+                if (++i > 10) {
+                    break;
                 }
-            }, function (err) {
-                processErr(err);
-            });
-        };
+                var formattedCourse = {
+                    shortName: course.Department + " " + course.CourseNumber,
+                    longName: course.Name,
+                    id: course.ID,
+                    sections: []
+                };
+                for (var section of course.Sections) {
+                    formattedCourse.sections = cds.formatSectionsArray(formattedCourse.shortName,course.Sections);
+                }
+                formattedCourses.push(formattedCourse);
+            }
+            console.log("Finished formatting course array.");
+            return formattedCourses;
+        }
 
-        cds.getSections = function (term, processSections, processErr) {
-            $http.get('/terms/'+term+'/course_offerings.json').then(function (courseOfferings) {
-                var courseSectionMap = new Object();
-                var offeringCount = courseOfferings.data.length;
-                for (var offering of courseOfferings.data) {
-                    // We wrap this next API request in a SEAF to capture the offering vaiable.
-                    (function (offering) {
-                        $http.get('/course_offerings/'+offering.id+'/sections.json').then(function (sections) {
-                            courseSectionMap[offering.course_id] = sections.data;
-                            if (--offeringCount == 0) {
-                                processSections(courseSectionMap);
-                            }
-                        }, function (err) {
-                            processErr(err);
-                            offeringCount--;
-                        });
-                    })(offering);
+        cds.formatSectionsArray = function (courseName, sections) {
+            var formattedSections = [];
+            for (var section of sections) {
+                for (var meeting of section.Meetings) {
+                    var days = cds.getDayIndicesFromInitialString(meeting.Days);
+                    var startDate = moment(meeting.Start,cds.timeFormat);
+                    var endDate = moment(meeting.End,cds.timeFormat);
+                    formattedSections.push({
+                        courseName: courseName,
+                        name: section.Code,
+                        startMoment: startDate,
+                        endMoment: endDate,
+                        days: days,
+                        active: false
+                    });
                 }
-            }, function (err) {
-                processErr(err);
-            });
+            }
+            return formattedSections;
+        }
+
+        cds.getDayIndicesFromInitialString = function (initialString) {
+            var days = [];
+            for (var letterIndex = 0; letterIndex < initialString.length; letterIndex++) {
+                var dayInitial = initialString.charAt(letterIndex);
+                if (dayInitial == 'M') {
+                    days.push(0);
+                } else if (dayInitial == 'T') {
+                    days.push(1);
+                } else if (dayInitial == 'W') {
+                    days.push(2);
+                } else if (dayInitial == 'R') {
+                    days.push(3);
+                } else if (dayInitial == 'F') {
+                    days.push(4);
+                }
+            }
+            return days;
         }
         
         cds.init();

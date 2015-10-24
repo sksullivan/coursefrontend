@@ -2,20 +2,20 @@
     <div class="col-md-3 course-accordions">
         <input type="text" ng-model="selected" placeholder="Add a class" typeahead="mb.class.name for class in mb.classes | filter:$viewValue | limitTo:8" typeahead-on-select="mb.addClass($label)" class="form-control">
         <br>
-        <accordion close-others="true"> 
-            <accordion-group ng-repeat="course in mb.courses | fuzzy:selected" is-open="status" ng-model="mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">
-                <accordion-heading>
+        <uib-accordion close-others="true"> 
+            <uib-accordion-group ng-repeat="course in mb.courses | fuzzy:selected" is-open="status" ng-model="mouseover" ng-mouseover="mouseover=true" ng-mouseleave="mouseover=false">
+                <uib-accordion-heading>
                     <div>
-                    {{ course.name }} - {{ course.title }}
+                    {{ course.shortName }} - {{ course.longName }}
                     <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status, 'glyphicon-chevron-right': !status}"></i>
                     <i class="pull-right glyphicon" ng-click="removeClass($index,$event)" ng-class="{'glyphicon-remove':mouseover}"></i>
                     </div>
-                </accordion-heading>
+                </uib-accordion-heading>
                 <ul class="list-group">
                     <li ng-click="mb.addSection(section)" class="list-group-item" ng-class="list-group-item" ng-repeat="section in course.sections">{{ section.name }}</li>
                 </ul>
-            </accordion-group>
-        </accordion>
+            </uib-accordion-group>
+        </uib-accordion>
     </div>
     <div class="col-md-9">
         <chartist class="ct-chart ct-golden-section" chartist-data="mb.agenda.chartData" chartist-chart-options="mb.agenda.chartOptions" chartist-events="mb.agenda.chartEvents" chartist-chart-type="Line"></chartist>
