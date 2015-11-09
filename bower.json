@@ -10,7 +10,14 @@
     "jquery-ui": "*",
     "angular-filter": "~0.5.7",
     "angular-chartist.js": "~3.3.9",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "paper-card": "PolymerElements/paper-card#~1.0.7",
+    "paper-item": "PolymerElements/paper-item#~1.0.6",
+    "iron-collapse": "PolymerElements/iron-collapse#~1.0.4",
+    "paper-input": "PolymerElements/paper-input#~1.0.18"
+  },
+  "devDependencies": {
+    "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.zip"
   },
   "resolutions": {
     "angular": ">=1.3",

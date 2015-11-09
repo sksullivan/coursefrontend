@@ -1,0 +1,7 @@
+src
+README.md
+.gitignore
+gulpfile.js
+node_modules
+.DS_Store
+docs
