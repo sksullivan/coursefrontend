@@ -11,6 +11,7 @@
 
         cds.init = function () {
             cds.timeFormat = "hh:mm a";
+            cds.batchAmount = 100;
         }
 
         cds.getCourses = function (processPartialCourses, processErr) {
@@ -25,11 +26,12 @@
             var formattedCourses = []
             var i = 0;
             for (var course of courses) {
-                if (i > 10) {
+                if (i > cds.batchAmount) {
                     partialCompletionCallback(formattedCourses);
                     i = 0;
                     formattedCourses = new Array();
-                    setTimeout(cds.formatCourseArray(courses.splice(0,10),partialCompletionCallback),0);
+                    courses.splice(0,cds.batchAmount);
+                    setTimeout(cds.formatCourseArray(courses,partialCompletionCallback),0);
                     return;
                 }
                 i++;

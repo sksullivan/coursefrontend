@@ -9,7 +9,7 @@
             </div>
         </paper-card>
         <paper-card heading="{{ course.shortName }} - {{ course.longName }}" ng-repeat="course in mb.courses | fuzzy:selected | limitTo: 8">
-            <div class="list short">
+            <div class="list short container card-content">
                 <paper-item
                     ng-click="mb.clickSection(section)"
                     ng-mouseenter="mb.highlightSection(section)"

@@ -1,14 +1,20 @@
-#calendar {
-    width: 100%;
+#course-cards .card-content {
+	width: 100%;
+	padding: 8px;
+}	
+
+#course-cards .container .card-content {
+	width: 200px;
 }
 
-/*#chart-card {
-	position: fixed;
-	width: 60%;
-	right: 25px;
-	top: 75px;
-	bottom: 25px;
-}*/
+#course-cards paper-item {
+	width: 4vw;
+  	height:4vw;
+	text-align: center;
+	margin: 5px;
+	background-color: #eee;
+	float: left;
+}
 
 #course-cards paper-card {
 	font-size: 18px;

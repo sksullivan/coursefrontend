@@ -2,6 +2,10 @@ body,html {
 	height: 100%;
 }
 
+#scheedule-header {
+	/*height: 10%;*/
+}
+
 #scheedule-body {
 	/*background-image: url(./images/paper.png);
 	background-size: 200px 200px;
