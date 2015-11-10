@@ -11,11 +11,13 @@
     "angular-filter": "~0.5.7",
     "angular-chartist.js": "~3.3.9",
     "moment": "~2.10.6",
+    "polymer": "Polymer/polymer#^1.2.0",
     "paper-card": "PolymerElements/paper-card#~1.0.7",
     "paper-item": "PolymerElements/paper-item#~1.0.6",
     "iron-collapse": "PolymerElements/iron-collapse#~1.0.4",
     "paper-input": "PolymerElements/paper-input#~1.0.18",
-    "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#~1.0.9"
+    "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#~1.0.9",
+    "paper-button": "PolymerElements/paper-button#~1.0.8"
   },
   "devDependencies": {
     "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.zip"

@@ -9,15 +9,15 @@
             </div>
         </paper-card>
         <paper-card heading="{{ course.shortName }} - {{ course.longName }}" ng-repeat="course in mb.courses | fuzzy:selected | limitTo: 8">
-            <div class="list short container card-content">
-                <paper-item
-                    ng-click="mb.clickSection(section)"
-                    ng-mouseenter="mb.highlightSection(section)"
-                    ng-mouseleave="mb.unhighlightSection(section)"
-                    ng-class="{'selected': section.active}"
-                    ng-repeat="section in course.sections">
-                    {{ section.name }}<br>
-                </paper-item>
+            <div class="container card-content">
+                    <paper-button raised
+                        ng-click="mb.clickSection(section)"
+                        ng-mouseenter="mb.highlightSection(section)"
+                        ng-mouseleave="mb.unhighlightSection(section)"
+                        ng-class="{'selected': section.active}"
+                        ng-repeat-start="section in course.sections">{{ section.name }}</paper-button>
+                    - <i>Closed</i>
+                    <br ng-repeat-end>
             </div>
         </paper-card>
     </div>

@@ -1,19 +1,15 @@
-#course-cards .card-content {
+/*#course-cards .card-content {
 	width: 100%;
 	padding: 8px;
-}	
+}*/
 
-#course-cards .container .card-content {
+/*#course-cards .container .card-content {
 	width: 200px;
-}
+}*/
 
-#course-cards paper-item {
-	width: 4vw;
-  	height:4vw;
-	text-align: center;
-	margin: 5px;
-	background-color: #eee;
-	float: left;
+#course-cards paper-button {
+	/*margin: 10px;
+	padding: 5px;*/
 }
 
 #course-cards paper-card {

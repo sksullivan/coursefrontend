@@ -16,38 +16,35 @@
 
         cds.getCourses = function (processPartialCourses, processErr) {
             $http.get('/api/all').then(function (courses) {
-                cds.formatCourseArray(courses.data,processPartialCourses);
+                cds.tempCourseData = courses.data;
+                cds.courseToProcessIndex = 0;
+                setTimeout(function () {
+                    cds.formatCourseArray(processPartialCourses);
+                }, 1);
             }, function (err) {
                 processErr(err);
             });
         };
 
-        cds.formatCourseArray = function (courses, partialCompletionCallback) {
-            var formattedCourses = []
-            var i = 0;
-            for (var course of courses) {
-                if (i > cds.batchAmount) {
-                    partialCompletionCallback(formattedCourses);
-                    i = 0;
-                    formattedCourses = new Array();
-                    courses.splice(0,cds.batchAmount);
-                    setTimeout(cds.formatCourseArray(courses,partialCompletionCallback),0);
-                    return;
-                }
-                i++;
-                var formattedCourse = {
-                    shortName: course.Department + " " + course.CourseNumber,
-                    longName: course.Name,
-                    id: course.ID,
-                    sections: []
-                };
-                for (var section of course.Sections) {
-                    formattedCourse.sections = cds.formatSectionsArray(formattedCourse,course.Sections);
-                }
-                formattedCourses.push(formattedCourse);
+        cds.formatCourseArray = function (partialCompletionCallback) {
+            var course = cds.tempCourseData[cds.courseToProcessIndex];
+            var formattedCourse = {
+                shortName: course.Department + " " + course.CourseNumber,
+                longName: course.Name,
+                id: course.ID,
+                sections: []
+            };
+            for (var section of course.Sections) {
+                formattedCourse.sections = cds.formatSectionsArray(formattedCourse,course.Sections);
             }
-            console.log("Finished formatting course array.");
-            partialCompletionCallback(formattedCourses);
+            partialCompletionCallback([formattedCourse]);
+            cds.courseToProcessIndex++;
+            if (cds.courseToProcessIndex < cds.tempCourseData.length) {
+                setTimeout(function () {
+                    cds.formatCourseArray(partialCompletionCallback);
+                },1);
+            }
+            // console.log("Finished formatting course array.");
         }
 
         cds.formatSectionsArray = function (course, sections) {
