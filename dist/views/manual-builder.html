@@ -3,23 +3,24 @@
         <paper-card>
             <div class="card-content" type="search">
                 <paper-input-container>
-                <input label="Search Classes" placeholder="Department" ng-model="department"></input>
+                    <input label="Search Classes" placeholder="Department" ng-model="department"></input>
                 </paper-input-container>
                 <paper-input-container>
-                <input label="Search Classes" placeholder="Course Number" ng-model="number"></input>
+                    <input label="Search Classes" placeholder="Course Number" ng-model="number"></input>
                 </paper-input-container>
             </div>
         </paper-card>
-        <paper-card heading="{{ course.shortName }} - {{ course.longName }}" ng-repeat="course in mb.courses | filter:{'shortName': department+' '+number} | limitTo: 8">
-            <div class="container card-content">
-                    <paper-button raised
-                        ng-click="mb.clickSection(section)"
-                        ng-mouseenter="mb.highlightSection(section)"
-                        ng-mouseleave="mb.unhighlightSection(section)"
-                        ng-class="{'selected': section.active}"
-                        ng-repeat-start="section in course.sections">{{ section.name }}</paper-button>
-                    - <i>Closed</i>
-                    <br ng-repeat-end>
+        <paper-card ng-repeat="course in mb.courses | filter:{'shortName': department+' '+number} | limitTo: 8">
+            <div class="card-content layout horizontal wrap">
+                <b>{{ course.shortName }} - {{ course.longName }}</b><br><br>
+                <paper-button raised
+                    ng-click="mb.clickSection(section)"
+                    ng-mouseenter="mb.highlightSection(section)"
+                    ng-mouseleave="mb.unhighlightSection(section)"
+                    ng-class="{'selected': section.active}"
+                    ng-repeat-start="section in course.sections">{{ section.name }}</paper-button>
+                <!-- - <i>Closed</i> -->
+                <br ng-repeat-end>
             </div>
         </paper-card>
     </div>

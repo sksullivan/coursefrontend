@@ -20,13 +20,17 @@ body,html {
 	width: 200px;
 }*/
 
+paper-button {
+	margin: 3px !important;
+}
+
 #course-cards paper-button {
-	/*margin: 10px;
-	padding: 5px;*/
+	padding: 5px;
+	margin: 5px;
+	font-size: 12px;
 }
 
 #course-cards paper-card {
-	font-size: 18px;
 	margin-bottom: 15px;
 	width: 100%;
 }
