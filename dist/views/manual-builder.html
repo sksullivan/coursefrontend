@@ -3,12 +3,14 @@
         <paper-card>
             <div class="card-content" type="search">
                 <paper-input-container>
-                <input label="Search Classes" placeholder="Search class names, titles, #s" ng-model="selected">
-                </input>
+                <input label="Search Classes" placeholder="Department" ng-model="department"></input>
+                </paper-input-container>
+                <paper-input-container>
+                <input label="Search Classes" placeholder="Course Number" ng-model="number"></input>
                 </paper-input-container>
             </div>
         </paper-card>
-        <paper-card heading="{{ course.shortName }} - {{ course.longName }}" ng-repeat="course in mb.courses | fuzzy:selected | limitTo: 8">
+        <paper-card heading="{{ course.shortName }} - {{ course.longName }}" ng-repeat="course in mb.courses | filter:{'shortName': department+' '+number} | limitTo: 8">
             <div class="container card-content">
                     <paper-button raised
                         ng-click="mb.clickSection(section)"
