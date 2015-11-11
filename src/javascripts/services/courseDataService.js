@@ -11,11 +11,10 @@
 
         cds.init = function () {
             cds.timeFormat = "hh:mm a";
-            cds.batchAmount = 100;
         }
 
         cds.getCourses = function (processPartialCourses, processErr) {
-            $http.get('/api/all').then(function (courses) {
+            $http.get('/api/prx/course/all').then(function (courses) {
                 cds.tempCourseData = courses.data;
                 cds.courseToProcessIndex = 0;
                 setTimeout(function () {

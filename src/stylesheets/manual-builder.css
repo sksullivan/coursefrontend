@@ -1,11 +1,11 @@
-/*#course-cards .card-content {
-	width: 100%;
-	padding: 8px;
-}*/
+html,body {
+	margin: 0;
+}
 
-/*#course-cards .container .card-content {
-	width: 200px;
-}*/
+paper-toolbar.header {
+    background: orange;
+    /*background-image: url(./images/quad.jpg) !important;*/
+}
 
 paper-button {
 	margin: 3px !important;
@@ -15,14 +15,38 @@ paper-button {
 	padding: 5px;
 	margin: 5px;
 	font-size: 12px;
+	width: 30%;
 }
 
-#course-cards paper-card {
-	margin-bottom: 15px;
+paper-card.active-courses {
+	width: auto;
+}
+
+paper-card {
+	margin: 15px !important;
 	width: 100%;
 }
 
-#course-cards .selected {
+#chart-course-cards paper-card {
+	left:15px;
+	margin: 15px;
+}
+
+#chart-course-cards {
+	margin-left: 15px;
+}
+
+#chart-card {
+	width: 95%;
+	height:80%;
+	/*margin: 15px;*/
+}
+
+#chart {
+	height:70%;
+}
+
+#select-course-cards .selected {
 	background-color: #36C;
 	color: white;
 }

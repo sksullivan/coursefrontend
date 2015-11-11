@@ -1,32 +1,55 @@
-<div class="row">
-    <div id="course-cards" class="col-md-3">
-        <paper-card>
-            <div class="card-content" type="search">
-                <paper-input-container>
-                    <input label="Search Classes" placeholder="Department" ng-model="department"></input>
-                </paper-input-container>
-                <paper-input-container>
-                    <input label="Search Classes" placeholder="Course Number" ng-model="number"></input>
-                </paper-input-container>
-            </div>
-        </paper-card>
-        <paper-card ng-repeat="course in mb.courses | filter:{'shortName': department+' '+number} | limitTo: 8">
-            <div class="card-content layout horizontal wrap">
-                <b>{{ course.shortName }} - {{ course.longName }}</b><br><br>
-                <paper-button raised
-                    ng-click="mb.clickSection(section)"
-                    ng-mouseenter="mb.highlightSection(section)"
-                    ng-mouseleave="mb.unhighlightSection(section)"
-                    ng-class="{'selected': section.active}"
-                    ng-repeat-start="section in course.sections">{{ section.name }}</paper-button>
-                <!-- - <i>Closed</i> -->
-                <br ng-repeat-end>
-            </div>
-        </paper-card>
-    </div>
-    <paper-card id="chart-card" heading="Spring 2016" class="col-md-9">
-        <div class="card-content">
-            <chartist class="ct-chart ct-golden-section" chartist-data="mb.agenda.chartData" chartist-chart-options="mb.agenda.chartOptions" chartist-events="mb.agenda.chartEvents" chartist-chart-type="Line"></chartist>
-        </div>
-    </paper-card>
+<paper-dialog modal id="save-dialog">
+	<h2>Save scheedule</h2>
+	<paper-dialog-scrollable>
+	What shall we call this one?
+	</paper-dialog-scrollable>
+	<div class="buttons">
+		<paper-input id="dialog-scheedule-title" label="i.e. Spring 2016"></paper-input>
+		<paper-button dialog-dismiss>Cancel</paper-button>
+		<paper-button dialog-confirm>Accept</paper-button>
+	</div>
+</paper-dialog>
+
+
+<div class="horizontal layout">
+	<div id="select-course-cards" class="flex-3">
+		<paper-card>
+			<div class="card-content" type="search">
+				<paper-input-container>
+					<input label="Search Classes" placeholder="Department" ng-model="department"></input>
+				</paper-input-container>
+				<paper-input-container>
+					<input label="Search Classes" placeholder="Course Number" ng-model="number"></input>
+				</paper-input-container>
+			</div>
+		</paper-card>
+		<paper-card ng-repeat="course in mb.courses | filter:{'shortName': department+' '+number} | limitTo: 8">
+			<div class="card-content layout horizontal wrap">
+				<b>{{ course.shortName }} - {{ course.longName }}</b>
+				<div ng-repeat="section in course.sections">
+					<paper-button raised
+						ng-click="mb.clickSection(section)"
+						ng-mouseenter="mb.highlightSection(section)"
+						ng-mouseleave="mb.unhighlightSection(section)"
+						ng-class="{'selected': section.active}">
+						{{ section.name }}
+					</paper-button>
+				</div>
+			</div>
+		</paper-card>
+	</div>
+	<div id="chart-course-cards" class="flex-9">
+		<paper-card id="chart-card" heading="Spring 2016">
+			<div class="card-content">
+				<chartist id="chart" class="ct-chart ct-golden-section" chartist-data="mb.agenda.chartData" chartist-chart-options="mb.agenda.chartOptions" chartist-events="mb.agenda.chartEvents" chartist-chart-type="Line"></chartist>
+			</div>
+		</paper-card>
+		<div class="layout horizontal wrap">
+			<paper-card class="active-courses" ng-classng-repeat="course in mb.courses | ActiveCoursesFilter">
+				<div class="card-content">
+					{{ course.shortName }}
+				</div>  
+			</paper-card>
+		</div>
+	</div>
 </div>

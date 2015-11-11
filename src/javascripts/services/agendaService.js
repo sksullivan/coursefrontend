@@ -14,6 +14,7 @@
     function AgendaService (AgendaModelService) {
         var as = this;
         var agenda = {};
+        as.ams = AgendaModelService;
 
         // Initialize service. Set displayed hour range.
         // Create functions on chart objects and initialize

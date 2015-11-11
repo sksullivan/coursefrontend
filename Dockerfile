@@ -12,3 +12,6 @@ RUN echo "cache bust"
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY . /usr/share/nginx/html
 RUN mv /usr/share/nginx/html/dist/* /usr/share/nginx/html/
+
+#VOLUME /usr/share/nginx/html
+#VOLUME /usr/share/nginx/html/bower_components

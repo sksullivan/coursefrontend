@@ -3,18 +3,19 @@
 
     angular
         .module('scheedule')
-        .controller('ManualBuilderController', ['CourseDataService', 'AgendaService', ManualBuilderController]);
+        .controller('ManualBuilderController', ['$rootScope','AuthService','CourseDataService', 'AgendaService', ManualBuilderController]);
 
     // Manual Agenda Builder Controller
     // ----------------
     //
     // Coordinates creating of agenda view, course selection accordions,
     // course searching and agenda/accordion interactions.
-    function ManualBuilderController (CourseDataService, AgendaService) {
+    function ManualBuilderController ($rootScope, AuthService, CourseDataService, AgendaService) {
         var mb = this;
         mb.init = function () {
             console.log("Loaded manual builder controller.");
             mb.courses = [];
+            mb.as = AgendaService;
 
             // Load courses from Course Data Service.
             CourseDataService.getCourses(function (someCourses) {
@@ -23,6 +24,11 @@
                 }
             }, function (err) {
                 console.log("Couldn't load course data from backend.");
+            });
+
+            $rootScope.$on('saveScheedule', function () {
+                var dialog = document.getElementById("save-dialog");
+                dialog.toggle();
             });
 
             // Initialize blank agenda.

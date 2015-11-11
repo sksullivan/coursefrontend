@@ -6,7 +6,7 @@ var docco = require("gulp-docco");
 var del = require('del');
 
 var paths = {
-  scripts: ['src/**/*.js','src/javascripts/**/*.js'],
+  scripts: ['src/**/*.js','src/javascripts/**/*.js','!src/javascripts/PolymerDOMPatch.js'],
   html: ['src/**/*.html','src/views/**/*.html'],
   css: ['src/**/*.css'],
   dist: 'dist/',
@@ -20,7 +20,12 @@ gulp.task('clean', function() {
   return del(paths.distContents);
 });
 
-gulp.task('scripts', ['clean'], function() {
+gulp.task('extras', [], function() {
+  return gulp.src("src/javascripts/PolymerDOMPatch.js")
+    .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('scripts', ['clean','extras'], function() {
   return gulp.src(paths.scripts)
     .pipe(ngAnnotate())
   	.pipe(closureCompiler({
@@ -35,7 +40,7 @@ gulp.task('scripts', ['clean'], function() {
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('scripts-dev', ['clean'], function() {
+gulp.task('scripts-dev', ['clean','extras'], function() {
   return gulp.src(paths.scripts)
     .pipe(concat('all.min.js', {newLine: ';'}))
     .pipe(gulp.dest(paths.dist));
