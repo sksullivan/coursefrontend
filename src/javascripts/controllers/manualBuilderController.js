@@ -26,9 +26,17 @@
                 console.log("Couldn't load course data from backend.");
             });
 
-            $rootScope.$on('saveScheedule', function () {
+            $rootScope.$on('saveSchedule', function () {
                 var dialog = document.getElementById("save-dialog");
                 dialog.toggle();
+            });
+
+            $rootScope.$on('loadSchedules', function () {
+                mb.loadSchedules();
+            });
+
+            $rootScope.$on('presentLoginModal', function () {
+                mb.presentLoginModal();
             });
 
             // Initialize blank agenda.
@@ -71,6 +79,35 @@
                 section.hovering = false;
                 mb.agenda.removeSeriesForSection(section);
             }
+        };
+
+        mb.saveSchedule = function () {
+            console.log("Saving schedule...");
+            CourseDataService.saveSchedule(['11111'],mb.scheduleTitle,function () {
+                console.log("Saved schedule.");
+            }, function (err) {
+                console.log("Error saving schedule.");
+                console.log(err);
+            });
+        };
+
+        mb.loadSchedules = function () {
+            console.log("Loading schedules...");
+            CourseDataService.loadSchedules(function (schedules) {
+                console.log("Loaded schedules.");
+                console.log(schedules.data);
+                mb.loadedSchedules = schedules.data;
+                var dialog = document.getElementById("load-dialog");
+                dialog.toggle();
+            }, function (err) {
+                console.log("Error loading schedules.");
+                console.log(err);
+            });
+        };
+
+        mb.presentLoginModal = function () {
+            var dialog = document.getElementById("login-dialog");
+            dialog.toggle();
         };
 
         mb.init();

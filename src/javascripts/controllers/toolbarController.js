@@ -12,11 +12,11 @@
 		};
 
 		tc.clickSave = function () {
-			$rootScope.$broadcast('saveScheedule');
+			$rootScope.$broadcast('saveSchedule');
 		};
 
 		tc.clickLoad = function () {
-			$rootScope.$broadcast('loadScheedule');
+			$rootScope.$broadcast('loadSchedules');
 		};
 
 		tc.init();

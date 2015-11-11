@@ -1,15 +1,42 @@
 <paper-dialog modal id="save-dialog">
-	<h2>Save scheedule</h2>
+	<h2>Save Schedule</h2>
 	<paper-dialog-scrollable>
 	What shall we call this one?
 	</paper-dialog-scrollable>
 	<div class="buttons">
-		<paper-input id="dialog-scheedule-title" label="i.e. Spring 2016"></paper-input>
+		<paper-input-container type="search">
+			<input id="dialog-scheedule-title" placeholder="Title" ng-model="mb.scheduleTitle"></input>
+		</paper-input-container>
 		<paper-button dialog-dismiss>Cancel</paper-button>
-		<paper-button dialog-confirm>Accept</paper-button>
+		<paper-button dialog-confirm ng-click="mb.saveSchedule()">Accept</paper-button>
 	</div>
 </paper-dialog>
 
+<paper-dialog modal id="load-dialog">
+	<h2>Load Schedules</h2>
+	<paper-dialog-scrollable>
+	Which schedule would you like to load?
+	</paper-dialog-scrollable>
+	<paper-listbox>
+		<paper-item ng-repeat="schedule in mb.loadedSchedules">{{ schedule.name }}</paper-item>
+	</paper-listbox>
+	<div class="buttons">
+		<br><br>
+		<paper-button dialog-dismiss>Cancel</paper-button>
+		<paper-button dialog-confirm ng-click="mb.loadSchedules()">Load</paper-button>
+	</div>
+</paper-dialog>
+
+<paper-dialog modal id="login-dialog">
+	<h2>Log in to Scheedule</h2>
+	<paper-dialog-scrollable>
+	Please login to use Scheedule.
+	</paper-dialog-scrollable>
+	<div class="buttons">
+		<paper-button dialog-dismiss>Cancel</paper-button>
+		<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+	</div>
+</paper-dialog>
 
 <div class="horizontal layout">
 	<div id="select-course-cards" class="flex-3">
@@ -45,8 +72,9 @@
 			</div>
 		</paper-card>
 		<div class="layout horizontal wrap">
-			<paper-card class="active-courses" ng-classng-repeat="course in mb.courses | ActiveCoursesFilter">
+			<paper-card class="active-courses" ng-repeat="course in mb.courses | ActiveCoursesFilter">
 				<div class="card-content">
+					<iron-icon ng-click="mb.deleteSection()" icon="icons:clear"></iron-icon>
 					{{ course.shortName }}
 				</div>  
 			</paper-card>

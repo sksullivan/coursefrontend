@@ -20,9 +20,6 @@
         // Create functions on chart objects and initialize
         // chart data.
         as.init = function () {
-            as.maxHour24 = 18;
-            as.minHour24 = 6;
-
             as.initChartData();
             as.initChartFunctions();    
         };
@@ -85,8 +82,6 @@
 
         // Set up drawing function on chart object, set chart options.
         as.initChartData = function () {
-            AgendaModelService.maxHour24 = 18;
-            AgendaModelService.minHour24 = 6;
             agenda.chartEvents = {
                 draw: function eventHandler(data) {
                     if (data.type === 'point') {
@@ -98,10 +93,6 @@
                             height: data.axisY.options.offset*data.series[data.index].decimalHours,
                             opacity: 1.0
                         }, '');
-                        newSvgElement._node.addEventListener('removeFromAgenda', function (e) {
-                            newSvgElement.removeClass('agenda-fade-in');
-                            newSvgElement.addClass('agenda-fade-out');
-                        }, true);
                         if (data.series[data.index].type == "hover") {
                             newSvgElement.addClass('agenda-hover');
                             newSvgElement.addClass('agenda-fade-in');
@@ -127,7 +118,7 @@
                 showLine: false,
                 axisY: {
                     labelInterpolationFnc: function (value) {
-                        value = as.minHour24 + as.maxHour24 - value;
+                        value = 24 - value;
                         if (value == 12) {
                             return value + ":00 PM"
                         } else if (value > 12) {

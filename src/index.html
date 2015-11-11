@@ -17,6 +17,8 @@
 <link rel="import" href="./bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="./bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="./bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="./bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="./bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <link rel="import" href="./views/PolymerPatchLoader.html">
 
@@ -34,12 +36,12 @@
     <paper-toolbar class="header">
         <div class="title">Scheedule</div>
         <paper-button>
-            <iron-icon ng-click="tc.clickSave(event)" icon="icons:file-download"></iron-icon>
+            <iron-icon ng-click="tc.clickSave()" icon="icons:file-download"></iron-icon>
         </paper-button>
         <paper-button>
-            <iron-icon icon="icons:file-upload"></iron-icon>
+            <iron-icon ng-click="tc.clickLoad()" icon="icons:file-upload"></iron-icon>
         </paper-button>
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
     </paper-toolbar>
 </div>
 <div ng-view></div>
