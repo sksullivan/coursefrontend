@@ -146,7 +146,7 @@
         ams.seriesPointForSectionDay = function (section, day, hover) {
             var point = {
                 x: day,
-                y: 24 - section.startMoment.hours(),
+                y: 24 - (section.startMoment.hours()+section.startMoment.minutes()/60.0),
                 name: section.name,
                 courseName: section.courseName,
                 decimalHours: (section.endMoment.unix() - section.startMoment.unix())/3600.0,

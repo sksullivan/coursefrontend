@@ -21,7 +21,8 @@
     "iron-icons": "PolymerElements/iron-icons#~1.0.4",
     "paper-dialog": "PolymerElements/paper-dialog#~1.0.2",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#~1.1.0",
-    "paper-menu": "PolymerElements/paper-menu#~1.1.1"
+    "paper-menu": "PolymerElements/paper-menu#~1.1.1",
+    "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#~1.0.1"
   },
   "devDependencies": {
     "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.zip"

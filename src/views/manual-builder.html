@@ -17,13 +17,15 @@
 	<paper-dialog-scrollable>
 	Which schedule would you like to load?
 	</paper-dialog-scrollable>
-	<paper-listbox>
-		<paper-item ng-repeat="schedule in mb.loadedSchedules">{{ schedule.name }}</paper-item>
+	<paper-dialog-scrollable>
+	<paper-listbox id="schedule-names">
+		<paper-item ng-click="mb.selectedSchedule($event)" ng-repeat="schedule in mb.loadedSchedules">{{ schedule.name }}</paper-item>
 	</paper-listbox>
+	</paper-dialog-scrollable>
 	<div class="buttons">
 		<br><br>
 		<paper-button dialog-dismiss>Cancel</paper-button>
-		<paper-button dialog-confirm ng-click="mb.loadSchedules()">Load</paper-button>
+		<paper-button dialog-confirm ng-click="mb.displaySchedule()">Load</paper-button>
 	</div>
 </paper-dialog>
 
