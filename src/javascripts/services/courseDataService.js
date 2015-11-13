@@ -26,7 +26,7 @@
         };
 
         cds.saveSchedule = function (CRNList, name, processSuccess, processErr) {
-            $http.post('/api/prx/schedule/put', {name: name, CRNList: CRNList}).then(function () {
+            $http.put('/api/prx/schedule', {name: name, CRNList: CRNList}).then(function () {
                 console.log({name: name, CRNList: CRNList});
                 processSuccess();
             }, function (err) {
@@ -35,9 +35,18 @@
         }
 
         cds.loadSchedules = function (processSchedules, processErr) {
-            $http.get('/api/prx/schedule/lookup').then(function (schedules) {
-                processSchedules(schedules);
+            $http.get('/api/prx/schedule').then(function (schedules) {
+                processSchedules(schedules.data);
                 console.log(schedules);
+            }, function (err) {
+                processErr(err);
+            });
+        }
+
+        cds.deleteSchedule = function (schedule, processSuccess, processErr) {
+            console.log(schedule.name);
+            $http.delete('/api/prx/schedule?' + $.param({name: schedule.name})).then(function () {
+                processSuccess();
             }, function (err) {
                 processErr(err);
             });

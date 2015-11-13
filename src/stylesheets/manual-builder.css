@@ -4,11 +4,16 @@ html,body {
 
 paper-toolbar.header {
     background: orange;
+    height:50px;
     /*background-image: url(./images/quad.jpg) !important;*/
 }
 
 paper-button {
 	margin: 3px !important;
+}
+
+paper-button.delete-icon {
+	/*right:0px;*/
 }
 
 #course-cards paper-button {
@@ -43,7 +48,7 @@ paper-card {
 }
 
 #chart {
-	height:70%;
+	height:80%;
 }
 
 #select-course-cards .selected {

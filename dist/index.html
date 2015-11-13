@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>lol</title>
+	<title>Scheedule [ALPHA]</title>
     <link rel="stylesheet" type="text/css" href="./all.min.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/chartist/dist/chartist.min.css">
@@ -35,14 +35,10 @@
 </nav> -->
 <div ng-controller="ToolbarController as tc">
     <paper-toolbar class="header">
-        <div class="title">Scheedule</div>
-        <paper-button>
-            <iron-icon ng-click="tc.clickSave()" icon="icons:file-download"></iron-icon>
-        </paper-button>
-        <paper-button>
-            <iron-icon ng-click="tc.clickLoad()" icon="icons:file-upload"></iron-icon>
-        </paper-button>
-        <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
+        <div class="title">Scheedule [ALPHA]</div>
+        <paper-button ng-click="tc.clickSave()">Save...</paper-button>
+        <paper-button ng-click="tc.clickLoad()">Manage</paper-button>
+        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     </paper-toolbar>
 </div>
 <div ng-view></div>

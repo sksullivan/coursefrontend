@@ -23,23 +23,25 @@
 
 	angular
 		.module('scheedule')
-		.filter('ActiveSectionsFilter', ['AgendaModelService', ActiveSectionsFilter]);
+		.filter('ActiveCRNFilter', ['AgendaModelService', ActiveCRNFilter]);
 
-		function ActiveSectionsFilter (AgendaModelService) {
+		function ActiveCRNFilter (AgendaModelService) {
 			return function(courses) {
+				console.log(AgendaModelService.activeCourses);
 				var activeSections = [];
-				console.log("calling ActiveSectionsFilter");
 				angular.forEach(courses, function (course) {
 					if (AgendaModelService.activeCourses[course.shortName] !== undefined) {
 						var courseRecord = AgendaModelService.activeCourses[course.shortName];
 						for (var property in courseRecord) {
 							if (courseRecord.hasOwnProperty(property) && AgendaModelService.isNumeric(property)) {
-								console.log(property);
-								activeSections.push(property);
+								if (courseRecord[property] !== undefined) {
+									activeSections.push(property);
+								}
 							}
 						}
 					}
 				});
+				console.log(activeSections);
 				return activeSections;
 			};
 		}

@@ -12,20 +12,26 @@
 	</div>
 </paper-dialog>
 
-<paper-dialog modal id="load-dialog">
+<paper-dialog modal id="manage-dialog">
 	<h2>Load Schedules</h2>
 	<paper-dialog-scrollable>
 	Which schedule would you like to load?
 	</paper-dialog-scrollable>
 	<paper-dialog-scrollable>
 	<paper-listbox id="schedule-names">
-		<paper-item ng-click="mb.selectedSchedule($event)" ng-repeat="schedule in mb.loadedSchedules">{{ schedule.name }}</paper-item>
+		<paper-item ng-click="mb.selectSchedule($event)" ng-repeat="schedule in mb.loadedSchedules">
+			{{ schedule.name }}
+			<paper-button ng-click="mb.deleteSchedule(schedule)" class="delete-icon">
+				<iron-icon icon="icons:clear"></iron-icon>
+			</paper-button>
+		</paper-item>
 	</paper-listbox>
 	</paper-dialog-scrollable>
 	<div class="buttons">
 		<br><br>
+		<paper-button ng-click="mb.displaySchedule()" dialog-confirm>Load</paper-button>
 		<paper-button dialog-dismiss>Cancel</paper-button>
-		<paper-button dialog-confirm ng-click="mb.displaySchedule()">Load</paper-button>
+		<!-- <paper-button dialog-confirm ng-click="mb.displaySchedule()">Load</paper-button> -->
 	</div>
 </paper-dialog>
 
@@ -76,7 +82,12 @@
 		<div class="layout horizontal wrap">
 			<paper-card class="active-courses" ng-repeat="course in mb.courses | ActiveCoursesFilter">
 				<div class="card-content">
-					<iron-icon ng-click="mb.deleteSection()" icon="icons:clear"></iron-icon>
+					<iron-icon
+						ng-mouseenter="mb.deleteCourse(course,true)"
+						ng-mouseleave="mb.undeleteCourse(course)"
+						ng-click="mb.deleteCourse(course,false)"
+						icon="icons:clear">
+					</iron-icon>
 					{{ course.shortName }}
 				</div>  
 			</paper-card>
