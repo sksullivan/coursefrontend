@@ -55,20 +55,20 @@
         cds.formatCourseArray = function (partialCompletionCallback) {
             var course = cds.tempCourseData[cds.courseToProcessIndex];
             var formattedCourse = {
-                shortName: course.Department + " " + course.CourseNumber,
-                longName: course.Name,
-                id: course.ID,
+                shortName: course.department + " " + course.courseNumber,
+                longName: course.name,
+                id: course.id,
                 sections: []
             };
-            for (var section of course.Sections) {
-                formattedCourse.sections = cds.formatSectionsArray(formattedCourse,course.Sections);
+            for (var section of course.sections) {
+                formattedCourse.sections = cds.formatSectionsArray(formattedCourse,course.sections);
             }
             partialCompletionCallback([formattedCourse]);
             cds.courseToProcessIndex++;
             if (cds.courseToProcessIndex < cds.tempCourseData.length) {
                 setTimeout(function () {
                     cds.formatCourseArray(partialCompletionCallback);
-                },1);
+                },0);
             }
             // console.log("Finished formatting course array.");
         }
@@ -76,15 +76,15 @@
         cds.formatSectionsArray = function (course, sections) {
             var formattedSections = [];
             for (var section of sections) {
-                for (var meeting of section.Meetings) {
-                    var days = cds.getDayIndicesFromInitialString(meeting.Days);
-                    var startDate = moment(meeting.Start,cds.timeFormat);
-                    var endDate = moment(meeting.End,cds.timeFormat);
+                for (var meeting of section.meetings) {
+                    var days = cds.getDayIndicesFromInitialString(meeting.days);
+                    var startDate = moment(meeting.start,cds.timeFormat);
+                    var endDate = moment(meeting.end,cds.timeFormat);
                     formattedSections.push({
-                        id: section.CRN,
+                        id: section.crn,
                         courseId: course.shortName,
                         courseName: course.shortName,
-                        name: section.Code,
+                        name: section.code,
                         startMoment: startDate,
                         endMoment: endDate,
                         days: days,
