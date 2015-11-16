@@ -1,38 +1,4 @@
-<!-- <paper-dialog modal id="save-dialog">
-	<h2>Save Schedule</h2>
-	<paper-dialog-scrollable>
-	What shall we call this one?
-	</paper-dialog-scrollable>
-	<div class="buttons">
-		<paper-input-container type="search">
-			<input id="dialog-scheedule-title" placeholder="Title" ng-model="mb.scheduleTitle"></input>
-		</paper-input-container>
-		<paper-button dialog-dismiss>Cancel</paper-button>
-		<paper-button dialog-confirm ng-click="mb.saveSchedule()">Accept</paper-button>
-	</div>
-</paper-dialog>
-
-<paper-dialog modal id="manage-dialog">
-	<h2>Load Schedules</h2>
-	<paper-dialog-scrollable>
-	Which schedule would you like to load?
-	</paper-dialog-scrollable>
-	<paper-dialog-scrollable>
-	<paper-listbox id="schedule-names">
-		<paper-item ng-click="mb.selectSchedule($event)" ng-repeat="schedule in mb.loadedSchedules">
-			{{ schedule.name }}
-			<paper-button ng-click="mb.deleteSchedule(schedule)" class="delete-icon">
-				<iron-icon icon="icons:clear"></iron-icon>
-			</paper-button>
-		</paper-item>
-	</paper-listbox>
-	</paper-dialog-scrollable>
-	<div class="buttons">
-		<br><br>
-		<paper-button ng-click="mb.displaySchedule()" dialog-confirm>Load</paper-button>
-		<paper-button dialog-dismiss>Cancel</paper-button>
-	</div>
-</paper-dialog>
+<!--
 
 <paper-dialog modal id="login-dialog">
 	<h2>Log in to Scheedule</h2>
@@ -46,6 +12,46 @@
 </paper-dialog> -->
 
 <div class="row">
+	<div id="save" class="alert alert-info" role="alert">
+		<div class="row alert-row">
+			<strong>What should this schedule be called?</strong>
+			<br>
+			<div>
+				<input id="dialog-scheedule-title" placeholder="Title" ng-model="mb.scheduleTitle"></input>
+			</div>
+			<span class="action-buttons pull-right">
+				<button class="btn btn-danger" ng-click="mb.closeDialog('save')">Cancel</button>
+				<button class="btn btn-default" ng-click="mb.saveSchedule()">Confirm</button>
+			</span>
+		</div>
+	</div>
+
+	<div id="saveSuccess" class="alert alert-success" role="alert">
+		<div class="row alert-row">
+			<strong>Saved Schedule!</strong>
+		</div>
+	</div>
+
+	<div id="manage" class="alert alert-info" role="alert">
+		<div class="row alert-row">
+			<strong>Saved Schedules:</strong>
+			<ul>
+				<li ng-click="mb.selectSchedule($event)" ng-repeat="schedule in mb.loadedSchedules">
+					{{ schedule.name }}
+					<button ng-click="mb.deleteSchedule(schedule)" class="delete-icon">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+					<button ng-click="mb.displaySchedule(schedule)" class="delete-icon">
+						<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+					</button>
+				</li>
+			</ul>
+			<span class="action-buttons pull-right">
+				<button class="btn btn-danger" ng-click="mb.closeDialog('manage')">Cancel</button>
+			</span>
+		</div>
+	</div>
+
 	<div class="col-md-3">
 		<input label="Search Classes" class="form-control" placeholder="Department" ng-model="department"></input>
 		<input label="Search Classes" class="form-control" placeholder="Course Number" ng-model="number"></input>

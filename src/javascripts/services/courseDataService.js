@@ -17,9 +17,7 @@
             $http.get('/api/prx/course/all').then(function (courses) {
                 cds.tempCourseData = courses.data;
                 cds.courseToProcessIndex = 0;
-                setTimeout(function () {
-                    cds.formatCourseArray(processPartialCourses);
-                }, 1);
+                cds.formatCourseArray(processPartialCourses);
             }, function (err) {
                 processErr(err);
             });
@@ -95,15 +93,15 @@
             for (var section of sections) {
                 for (var meeting of section.meetings) {
                     var days = cds.getDayIndicesFromInitialString(meeting.days);
-                    // var startDate = moment(meeting.start,cds.timeFormat);
-                    // var endDate = moment(meeting.end,cds.timeFormat);
+                    var startDate = moment(meeting.start,cds.timeFormat);
+                    var endDate = moment(meeting.end,cds.timeFormat);
                     formattedSections.push({
                         id: section.crn,
                         courseId: course.shortName,
                         courseName: course.shortName,
                         name: section.code,
-                        // startMoment: startDate,
-                        // endMoment: endDate,
+                        startMoment: startDate,
+                        endMoment: endDate,
                         days: days,
                         active: false,
                         hovering: false

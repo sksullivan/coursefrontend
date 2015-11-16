@@ -9,7 +9,7 @@
     <meta name="google-signin-client_id" content="1017771976315-61a59melpai2mvifc7cd97td8uba15oq.apps.googleusercontent.com">
 </head>
 <body id="scheedule-body" ng-app="scheedule">
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" ng-controller="ToolbarController as tc">
     <div id="scheedule-header" class="container">
         <a class="navbar-brand" href="#/index">Scheedule</a>
         <ul class="nav navbar-nav navbar-left">
@@ -20,12 +20,12 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <p class="navbar-btn">
-                    <button type="button" class="btn btn-default" ng-click="tc.clickSave()">Save...</button>
+                    <button type="button" class="btn btn-default" ng-click="tc.clickOpenSave()">Save...</button>
                 </p>
             </li>
             <li>
                 <p class="navbar-btn">
-                    <button type="button" class="btn btn-default" ng-click="tc.clickLoad()">Manage</button>
+                    <button type="button" class="btn btn-default" ng-click="tc.clickOpenManage()">Manage</button>
                 </p>
             </li>
             <li>
