@@ -3,14 +3,14 @@
 
 	angular
 		.module('scheedule')
-		.controller('ManualBuilderController', ['$rootScope','$filter','AuthService','CourseDataService', 'AgendaService', ManualBuilderController]);
+		.controller('ManualBuilderController', ['$scope','$rootScope','$filter','AuthService','CourseDataService', 'AgendaService', ManualBuilderController]);
 
 	// Manual Agenda Builder Controller
 	// ----------------
 	//
 	// Coordinates creating of agenda view, course selection accordions,
 	// course searching and agenda/accordion interactions.
-	function ManualBuilderController ($rootScope, $filter, AuthService, CourseDataService, AgendaService) {
+	function ManualBuilderController ($scope, $rootScope, $filter, AuthService, CourseDataService, AgendaService) {
 		var mb = this;
 		mb.init = function () {
 			console.log("Loaded manual builder controller.");
@@ -19,7 +19,9 @@
 			// Load courses from Course Data Service.
 			CourseDataService.getCourses(function (someCourses) {
 				for (var course of someCourses) {
-					mb.courses.push(course);
+					$scope.$apply(function () {
+						mb.courses.push(course);
+					});
 				}
 			}, function (err) {
 				console.log("Couldn't load course data from backend.");

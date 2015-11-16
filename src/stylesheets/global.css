@@ -1,14 +1,18 @@
-body,html {
-	height: 100%;
+div.toolbar {
+	/*position: absolute;*/
+	/*height: 50px;*/
 }
 
-#scheedule-header {
-	/*height: 10%;*/
+span.toolbar-title {
+	/*line-height: 50px;*/
 }
 
-#scheedule-body {
-	/*background-image: url(./images/paper.png);
-	background-size: 200px 200px;
-	background-repeat:repeat;*/
-	background-color: #EEE;
+div.toolbar-buttons {
+	/*line-height: 50px;*/
+	/*float: right;*/
+}
+
+div.toolbar-signin-button {
+	line-height: 50px;
+	float: right;
 }

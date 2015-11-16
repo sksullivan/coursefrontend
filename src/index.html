@@ -1,47 +1,49 @@
 <html>
 <head>
 	<title>Scheedule [ALPHA]</title>
-    <link rel="stylesheet" type="text/css" href="./all.min.css">
+    <link rel="stylesheet" type="text/css" href="./stylesheets/global.css">
+    <link rel="stylesheet" type="text/css" href="./stylesheets/manual-builder.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="./bower_components/chartist/dist/chartist.min.css">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="1017771976315-61a59melpai2mvifc7cd97td8uba15oq.apps.googleusercontent.com">
 </head>
 <body id="scheedule-body" ng-app="scheedule">
-<link rel="import" href="./bower_components/paper-card/paper-card.html">
-<link rel="import" href="./bower_components/paper-item/paper-item.html">
-<link rel="import" href="./bower_components/paper-input/paper-input.html">
-<link rel="import" href="./bower_components/paper-toolbar/paper-toolbar.html">
-<link rel="import" href="./bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="./bower_components/paper-button/paper-button.html">
-<link rel="import" href="./bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="./bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="./bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="./bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="./bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="./bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-
-<link rel="import" href="./views/PolymerPatchLoader.html">
-
-<!-- <nav class="navbar navbar-default">
+<nav class="navbar navbar-default">
     <div id="scheedule-header" class="container">
         <a class="navbar-brand" href="#/index">Scheedule</a>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-left">
             <li><a href="#/manual-builder">Manual Builder</a></li>
             <li><a href="#/auto-builder">Auto Builder</a></li>
             <li><a href="#/schedule-viewer">Generated Schedules</a></li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <p class="navbar-btn">
+                    <button type="button" class="btn btn-default" ng-click="tc.clickSave()">Save...</button>
+                </p>
+            </li>
+            <li>
+                <p class="navbar-btn">
+                    <button type="button" class="btn btn-default" ng-click="tc.clickLoad()">Manage</button>
+                </p>
+            </li>
+            <li>
+                <p class="navbar-btn">
+                    <div class="g-signin2 toolbar-signin-button" data-onsuccess="onSignIn" data-theme="dark"></div>
+                </p>
+            </li>
+        </ul>
     </div>
-</nav> -->
-<div ng-controller="ToolbarController as tc">
-    <paper-toolbar class="header">
-        <div class="title">Scheedule [ALPHA]</div>
-        <paper-button ng-click="tc.clickSave()">Save...</paper-button>
-        <paper-button ng-click="tc.clickLoad()">Manage</paper-button>
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-    </paper-toolbar>
-</div>
-<div ng-view></div>
+</nav>
+<!-- <div class="row toolbar" ng-controller="ToolbarController as tc">
+    <div class="toolbar-title">Scheedule [ALPHA]</div>
+    <div class="toolbar-buttons">
+        <input type="button" ng-click="tc.clickSave()" value="Save..."></input>
+        <input type="button" ng-click="tc.clickLoad()" value="Manage"></input>
+    </div>
+</div> -->
+<div ng-view class="container"></div>
 
 <script src="./bower_components/jquery/dist/jquery.min.js"></script>
 <script src="./bower_components/jquery-ui/jquery-ui.min.js"></script>
@@ -53,7 +55,6 @@
 <script src="./bower_components/chartist/dist/chartist.min.js"></script>
 <script src="./bower_components/moment/min/moment.min.js"></script>
 <script src="./bower_components/angular-chartist.js/dist/angular-chartist.min.js"></script>
-<script src="./bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <script src="./all.min.js"></script>

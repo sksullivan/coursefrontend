@@ -52,25 +52,42 @@
             });
         }
 
+        // cds.formatCourseArray = function (partialCompletionCallback) {
+        //     var course = cds.tempCourseData[cds.courseToProcessIndex];
+        //     var formattedCourse = {
+        //         shortName: course.department + " " + course.courseNumber,
+        //         longName: course.name,
+        //         id: course.id,
+        //         sections: []
+        //     };
+        //     for (var section of course.sections) {
+        //         formattedCourse.sections = cds.formatSectionsArray(formattedCourse,course.sections);
+        //     }
+        //     partialCompletionCallback([formattedCourse]);
+        //     cds.courseToProcessIndex++;
+        //     if (cds.courseToProcessIndex < cds.tempCourseData.length) {
+        //         setTimeout(function () {
+        //             cds.formatCourseArray(partialCompletionCallback);
+        //         },0);
+        //     }
+        //     // console.log("Finished formatting course array.");
+        // }
+
         cds.formatCourseArray = function (partialCompletionCallback) {
-            var course = cds.tempCourseData[cds.courseToProcessIndex];
-            var formattedCourse = {
-                shortName: course.department + " " + course.courseNumber,
-                longName: course.name,
-                id: course.id,
-                sections: []
-            };
-            for (var section of course.sections) {
-                formattedCourse.sections = cds.formatSectionsArray(formattedCourse,course.sections);
+            var formattedCourses = [];
+            for (var course of cds.tempCourseData) {
+                var formattedCourse = {
+                    shortName: course.department + " " + course.courseNumber,
+                    longName: course.name,
+                    id: course.id,
+                    sections: []
+                };
+                for (var section of course.sections) {
+                    formattedCourse.sections = cds.formatSectionsArray(formattedCourse,course.sections);
+                }
+                formattedCourses.push(formattedCourse);
             }
-            partialCompletionCallback([formattedCourse]);
-            cds.courseToProcessIndex++;
-            if (cds.courseToProcessIndex < cds.tempCourseData.length) {
-                setTimeout(function () {
-                    cds.formatCourseArray(partialCompletionCallback);
-                },0);
-            }
-            // console.log("Finished formatting course array.");
+            partialCompletionCallback(formattedCourses);
         }
 
         cds.formatSectionsArray = function (course, sections) {
@@ -78,15 +95,15 @@
             for (var section of sections) {
                 for (var meeting of section.meetings) {
                     var days = cds.getDayIndicesFromInitialString(meeting.days);
-                    var startDate = moment(meeting.start,cds.timeFormat);
-                    var endDate = moment(meeting.end,cds.timeFormat);
+                    // var startDate = moment(meeting.start,cds.timeFormat);
+                    // var endDate = moment(meeting.end,cds.timeFormat);
                     formattedSections.push({
                         id: section.crn,
                         courseId: course.shortName,
                         courseName: course.shortName,
                         name: section.code,
-                        startMoment: startDate,
-                        endMoment: endDate,
+                        // startMoment: startDate,
+                        // endMoment: endDate,
                         days: days,
                         active: false,
                         hovering: false
