@@ -104,7 +104,7 @@
                     var days = cds.getDayIndicesFromInitialString(meeting.days);
                     var startDate = moment(meeting.start,cds.timeFormat);
                     var endDate = moment(meeting.end,cds.timeFormat);
-                    formattedSections.push({
+                    var formattedSection = {
                         id: section.crn,
                         courseId: course.shortName,
                         courseName: course.shortName,
@@ -114,7 +114,13 @@
                         days: days,
                         active: false,
                         hovering: false
-                    });
+                    };
+                    if (formattedSection.name == "") {
+                        formattedSection.name = "NO NAME";
+                        console.log(days);
+                        console.log(formattedSection);
+                    }
+                    formattedSections.push(formattedSection);
                 }
             }
             return formattedSections;

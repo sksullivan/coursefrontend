@@ -76,6 +76,16 @@
                 }
 
                 // Add our new series to the calendar
+                if (newSeries.length == 0) {
+                        newSeries.push({
+                        x: 0,
+                        y: 0,
+                        name: operation,
+                        courseName: operation,
+                        decimalHours: 0,
+                        type: "normal"
+                    });
+                }
                 seriesData.push(newSeries);
                 ams.activeCourses[operation.section.courseId].index = seriesData.indexOf(newSeries);
 
