@@ -26,9 +26,14 @@
 
 			// Load courses from Course Data Service.
 			CourseDataService.getCourses(function (someCourses) {
-				for (var course of someCourses) {
-					mb.courses.push(course);
-				}
+				console.log("PROCESSING Courses");
+				console.log(someCourses);
+				$scope.$apply(function(){
+					for (var course of someCourses) {
+						mb.courses.push(course);
+					}
+				});
+
 			}, function (err) {
 				console.log("Couldn't load course data from backend.");
 				console.log(err);

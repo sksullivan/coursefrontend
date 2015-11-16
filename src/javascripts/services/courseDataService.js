@@ -14,13 +14,22 @@
         }
 
         cds.getCourses = function (processPartialCourses, processErr) {
-            $http.get('/api/prx/course/all').then(function (courses) {
-                cds.tempCourseData = courses.data;
-                cds.courseToProcessIndex = 0;
-                cds.formatCourseArray(processPartialCourses);
-            }, function (err) {
-                processErr(err);
-            });
+            if (window.courseArray !== undefined) {
+                processPartialCourses(window.courseArray);
+            } else {
+                window.courseArrayCallback = function (courses) {
+                    cds.tempCourseData = courses;
+                    cds.courseToProcessIndex = 0;
+                    cds.formatCourseArray(processPartialCourses);
+                };
+                // $http.get('/api/prx/course/all').then(function (courses) {
+                //     cds.tempCourseData = courses.data;
+                //     cds.courseToProcessIndex = 0;
+                //     cds.formatCourseArray(processPartialCourses);
+                // }, function (err) {
+                //     processErr(err);
+                // });
+            }
         };
 
         cds.saveSchedule = function (CRNList, name, processSuccess, processErr) {
@@ -30,7 +39,7 @@
             }, function (err) {
                 processErr(err);
             });
-        }
+        };
 
         cds.loadSchedules = function (processSchedules, processErr) {
             $http.get('/api/prx/schedule').then(function (schedules) {
@@ -39,7 +48,7 @@
             }, function (err) {
                 processErr(err);
             });
-        }
+        };
 
         cds.deleteSchedule = function (schedule, processSuccess, processErr) {
             console.log(schedule.name);
@@ -48,7 +57,7 @@
             }, function (err) {
                 processErr(err);
             });
-        }
+        };
 
         // cds.formatCourseArray = function (partialCompletionCallback) {
         //     var course = cds.tempCourseData[cds.courseToProcessIndex];
@@ -86,7 +95,7 @@
                 formattedCourses.push(formattedCourse);
             }
             partialCompletionCallback(formattedCourses);
-        }
+        };
 
         cds.formatSectionsArray = function (course, sections) {
             var formattedSections = [];
@@ -109,7 +118,7 @@
                 }
             }
             return formattedSections;
-        }
+        };
 
         cds.getDayIndicesFromInitialString = function (initialString) {
             var days = [];

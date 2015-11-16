@@ -7,6 +7,23 @@
 	<link rel="stylesheet" type="text/css" href="./bower_components/chartist/dist/chartist.min.css">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="1017771976315-61a59melpai2mvifc7cd97td8uba15oq.apps.googleusercontent.com">
+    <script>
+    function loadDoc() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                if (window.courseArrayCallback !== undefined) {
+                    window.courseArrayCallback(JSON.parse(xhttp.response));
+                } else {
+                    window.courseArray = JSON.parse(xhttp.response);
+                }
+            }
+        };
+        xhttp.open("GET", "/api/prx/course/all", true);
+        xhttp.send();
+    }
+    loadDoc();
+</script>
 </head>
 <body id="scheedule-body" ng-app="scheedule">
 <nav class="navbar navbar-default" ng-controller="ToolbarController as tc">
@@ -44,6 +61,7 @@
     </div>
 </div> -->
 <div ng-view class="container"></div>
+
 
 <script src="./bower_components/jquery/dist/jquery.min.js"></script>
 <script src="./bower_components/jquery-ui/jquery-ui.min.js"></script>
