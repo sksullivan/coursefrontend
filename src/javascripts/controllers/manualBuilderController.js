@@ -31,6 +31,8 @@
 				}
 			}, function (err) {
 				console.log("Couldn't load course data from backend.");
+				console.log(err);
+				mb.showError("Couldn't load course data from backend.",err);
 			});
 
 			// Listen for events broadcast from other controllers on the root scope.
@@ -124,6 +126,7 @@
 			}, function (err) {
 				console.log("Error deleting schedule.");
 				console.log(err);
+				mb.showError("Error deleting schedule.",err);
 			});
 		};
 
@@ -151,6 +154,7 @@
 				// display an error dialog.
 				console.log("Error saving schedule.");
 				console.log(err);
+				mb.showError("Error saving schedule.",err);
 			});
 		};
 
@@ -162,13 +166,16 @@
 				console.log("Loaded schedules.");
 				// Throw the data we got back from the API into the list of possible
 				// schedules to load on our load dialog.
-				mb.loadedSchedules = schedules
-				handleLoadedSchedules();
+				mb.loadedSchedules = schedules;
+				if (handleLoadedSchedules !== undefined) {
+					handleLoadedSchedules();
+				}
 			}, function (err) {
 				// If we had trouble getting the list of schedules, show an error
 				// dialog.
 				console.log("Error loading schedules.");
 				console.log(err);
+				mb.showError("Error loading schedules.",err);
 			});
 		};
 
@@ -202,7 +209,6 @@
 			if (selectedScheduleName != "") {
 				selectedScheduleName = selectedScheduleName.slice(0, selectedScheduleName.indexOf("<")).trim();
 			}
-			console.log(selectedScheduleName);
 			for (var loadedScheduleIndex = 0; loadedScheduleIndex < mb.loadedSchedules.length; loadedScheduleIndex++) {
 				var schedule = mb.loadedSchedules[loadedScheduleIndex];
 				if (schedule.name == selectedScheduleName) {
@@ -215,6 +221,7 @@
 			$('#save').hide();
 			$('#saveSuccess').hide();
 			$('#manage').hide();
+			$('#error').hide();
 		}
 
 		mb.openDialog = function (name) {
@@ -223,6 +230,16 @@
 
 		mb.closeDialog = function (name) {
 			$('#'+name).fadeOut();
+		}
+
+		mb.showError = function (friendlyMessage, message) {
+			$('#error-message').html(friendlyMessage + "<br><br>" + JSON.stringify(message));
+			mb.openDialog('error');
+			setTimeout(function () {
+				$scope.$apply(function () {
+					mb.closeDialog('error');
+				});
+			},5000);
 		}
 
 		mb.init();
