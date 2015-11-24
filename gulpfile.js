@@ -6,7 +6,7 @@ var docco = require("gulp-docco");
 var del = require('del');
 
 var paths = {
-  scripts: ['src/**/*.js','src/javascripts/**/*.js','!src/javascripts/PolymerDOMPatch.js'],
+  scripts: ['src/**/*.js','src/javascripts/**/*.js'],
   html: ['src/**/*.html','src/views/**/*.html'],
   css: ['src/**/*.css'],
   dist: 'dist/',
@@ -53,7 +53,7 @@ gulp.task('html', [], function() {
 
 gulp.task('css', [], function() {
   return gulp.src(paths.css)
-  	.pipe(concat('all.min.css', {newLine: ';'}))
+  	// .pipe(concat('all.min.css', {newLine: ';'}))
     .pipe(gulp.dest(paths.dist));
 });
 

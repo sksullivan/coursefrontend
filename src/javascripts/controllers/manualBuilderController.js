@@ -3,43 +3,64 @@
 
 	angular
 		.module('scheedule')
-		.controller('ManualBuilderController', ['$rootScope','$filter','AuthService','CourseDataService', 'AgendaService', ManualBuilderController]);
+		.controller('ManualBuilderController', ['$scope','$rootScope','$filter','AuthService','CourseDataService', 'AgendaService', ManualBuilderController]);
 
 	// Manual Agenda Builder Controller
 	// ----------------
 	//
 	// Coordinates creating of agenda view, course selection accordions,
 	// course searching and agenda/accordion interactions.
-	function ManualBuilderController ($rootScope, $filter, AuthService, CourseDataService, AgendaService) {
+	function ManualBuilderController ($scope, $rootScope, $filter, AuthService, CourseDataService, AgendaService) {
 		var mb = this;
 		mb.init = function () {
 			console.log("Loaded manual builder controller.");
 			mb.courses = [];
+			mb.dialogs = {
+				save: false,
+				saveSuccess: false,
+				manage: false,
+				login: false,
+			};
+
+			mb.hideAllDialogs();
 
 			// Load courses from Course Data Service.
 			CourseDataService.getCourses(function (someCourses) {
-				for (var course of someCourses) {
-					mb.courses.push(course);
-				}
+				console.log("PROCESSING Courses");
+				console.log(someCourses);
+				$scope.$apply(function(){
+					for (var course of someCourses) {
+						mb.courses.push(course);
+					}
+				});
+
 			}, function (err) {
 				console.log("Couldn't load course data from backend.");
+				console.log(err);
+				mb.showError("Couldn't load course data from backend.",err);
 			});
 
 			// Listen for events broadcast from other controllers on the root scope.
-			$rootScope.$on('saveSchedule', function () {
-				mb.openDialog("save-dialog");
+			$rootScope.$on('openSaveSchedule', function () {
+				mb.openDialog("save");
 			});
 
-			$rootScope.$on('loadSchedules', function () {
-				mb.loadSchedules();
+			$rootScope.$on('closeSaveSchedule', function () {
+				mb.closeDialog("save");
 			});
 
-			$rootScope.$on('presentLoginModal', function () {
-				mb.openDialog("login-dialog");
+			$rootScope.$on('openManageSchedules', function () {
+				mb.loadSchedules(function () {
+					mb.openDialog("manage");
+				});
 			});
 
 			// Initialize blank agenda.
 			mb.agenda = AgendaService.blankAgenda();
+		};
+
+		mb.searchQueryChanged = function (newDep, newNum) {
+			mb.searchResults = $filter('filter')(mb.courses,{'shortName': newDep+' '+newNum});
 		};
 
 		// Fired upon clicking a section.
@@ -110,12 +131,14 @@
 			}, function (err) {
 				console.log("Error deleting schedule.");
 				console.log(err);
+				mb.showError("Error deleting schedule.",err);
 			});
 		};
 
 		// Save the current set of sections on the calendar.
 		mb.saveSchedule = function () {
 			console.log("Saving schedule...");
+			mb.closeDialog('save');
 			var CRNList = [];
 			// Grab the active section from our list of courses.
 			for (var CRN of $filter('ActiveCRNFilter')(mb.courses)) {
@@ -125,41 +148,48 @@
 			CourseDataService.saveSchedule(CRNList,mb.scheduleTitle,function () {
 				console.log("Saved schedule.");
 				// If things went ok, close the save dialog.
-				mb.closeDialog("save-dialog");
+				mb.openDialog('saveSuccess');
+				setTimeout(function () {
+					$scope.$apply(function () {
+						mb.closeDialog('saveSuccess');
+					});
+				},3000);
 			}, function (err) {
 				// If there was an error (not logged in, not inet access, etc.)
 				// display an error dialog.
 				console.log("Error saving schedule.");
 				console.log(err);
+				mb.showError("Error saving schedule.",err);
 			});
 		};
 
 		// Load up a list of schedules to pick from in our load schedules dialog.
-		mb.loadSchedules = function () {
+		mb.loadSchedules = function (handleLoadedSchedules) {
 			console.log("Loading schedules...");
 			// Get the list of schedules from the API.
 			CourseDataService.loadSchedules(function (schedules) {
 				console.log("Loaded schedules.");
 				// Throw the data we got back from the API into the list of possible
 				// schedules to load on our load dialog.
-				mb.loadedSchedules = schedules
-				mb.openDialog("manage-dialog");
+				mb.loadedSchedules = schedules;
+				if (handleLoadedSchedules !== undefined) {
+					handleLoadedSchedules();
+				}
 			}, function (err) {
 				// If we had trouble getting the list of schedules, show an error
 				// dialog.
 				console.log("Error loading schedules.");
 				console.log(err);
+				mb.showError("Error loading schedules.",err);
 			});
 		};
 
 		// Display a selected, loaded schedule into our calendar.
-		mb.displaySchedule = function () {
+		mb.displaySchedule = function (schedule) {
 			mb.agenda = AgendaService.blankAgenda();
-			// Get the HTML element for the list of schedules.
-			var scheduleList = document.getElementById("schedule-names");
 			// Get the list of CRNs for the selected schedule (this index is set 
 			// in the ng-click listener for schedule-names)
-			var CRNList = mb.loadedSchedules[mb.selectedScheduleIndex].CRNList;
+			var CRNList = schedule.CRNList;
 			var activatedSections = [];
 			// Iterate through all CRNs in our list.
 			for (var crnIndex = 0; crnIndex < CRNList.length; crnIndex++) {
@@ -176,7 +206,7 @@
 					}
 				}
 			}
-			mb.closeDialog("manage-dialog");
+			mb.closeDialog("manage");
 		}
 
 		mb.selectSchedule = function (event) {
@@ -184,7 +214,6 @@
 			if (selectedScheduleName != "") {
 				selectedScheduleName = selectedScheduleName.slice(0, selectedScheduleName.indexOf("<")).trim();
 			}
-			console.log(selectedScheduleName);
 			for (var loadedScheduleIndex = 0; loadedScheduleIndex < mb.loadedSchedules.length; loadedScheduleIndex++) {
 				var schedule = mb.loadedSchedules[loadedScheduleIndex];
 				if (schedule.name == selectedScheduleName) {
@@ -193,17 +222,29 @@
 			}
 		};
 
+		mb.hideAllDialogs = function () {
+			$('#save').hide();
+			$('#saveSuccess').hide();
+			$('#manage').hide();
+			$('#error').hide();
+		}
+
 		mb.openDialog = function (name) {
-			var dialog = document.getElementById(name);
-			dialog.open();
-			window.setTimeout(function () {
-				dialog.center();
-			},1);
+			$('#'+name).fadeIn();
 		}
 
 		mb.closeDialog = function (name) {
-			var dialog = document.getElementById(name);
-			dialog.close();
+			$('#'+name).fadeOut();
+		}
+
+		mb.showError = function (friendlyMessage, message) {
+			$('#error-message').html(friendlyMessage + "<br><br>" + JSON.stringify(message));
+			mb.openDialog('error');
+			setTimeout(function () {
+				$scope.$apply(function () {
+					mb.closeDialog('error');
+				});
+			},5000);
 		}
 
 		mb.init();

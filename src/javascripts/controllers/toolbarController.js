@@ -11,12 +11,20 @@
 			console.log("Loaded toolbar controller.");
 		};
 
-		tc.clickSave = function () {
-			$rootScope.$broadcast('saveSchedule');
+		tc.clickOpenSave = function () {
+			$rootScope.$broadcast('openSaveSchedule');
 		};
 
-		tc.clickLoad = function () {
-			$rootScope.$broadcast('loadSchedules');
+		tc.clickConfirmSave = function () {
+			$rootScope.$broadcast('confirmSaveSchedule');
+		};
+
+		tc.clickOpenManage = function () {
+			$rootScope.$broadcast('openManageSchedules');
+		};
+
+		tc.clickCloseManage = function () {
+			$rootScope.$broadcast('closeManageSchedules');
 		};
 
 		tc.init();
