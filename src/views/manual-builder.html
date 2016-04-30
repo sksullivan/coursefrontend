@@ -11,56 +11,95 @@
 	</div>
 </paper-dialog> -->
 
-<div class="row">
-	<div id="save" class="alert alert-info" role="alert">
-		<div class="row alert-row">
-			<strong>What should this schedule be called?</strong>
-			<br>
-			<div>
-				<input id="dialog-scheedule-title" placeholder="Title" ng-model="mb.scheduleTitle"></input>
-			</div>
-			<span class="action-buttons pull-right">
-				<button class="btn btn-danger" ng-click="mb.closeDialog('save')">Cancel</button>
-				<button class="btn btn-default" ng-click="mb.saveSchedule()">Confirm</button>
-			</span>
-		</div>
-	</div>
+<div class="row manual-body">
+    <div id="save" class="alert alert-info" role="alert">
+        <div class="row alert-row">
+            <strong>What should this schedule be called?</strong>
+            <br>
+            <div>
+                <input id="dialog-scheedule-title" placeholder="Title" ng-model="mb.scheduleTitle"></input>
+            </div>
+            <span class="action-buttons pull-right">
+                <button class="btn btn-danger" ng-click="mb.closeDialog('save')">Cancel</button>
+                <button class="btn btn-default" ng-click="mb.saveSchedule()">Confirm</button>
+            </span>
+        </div>
+    </div>
 
-	<div id="saveSuccess" class="alert alert-success" role="alert">
-		<div class="row alert-row">
-			<strong>Saved Schedule!</strong>
-		</div>
-	</div>
+    <div id="saveSuccess" class="alert alert-success" role="alert">
+        <div class="row alert-row">
+            <strong>Saved Schedule!</strong>
+        </div>
+    </div>
 
-	<div id="manage" class="alert alert-info" role="alert">
-		<div class="row alert-row">
-			<strong>Saved Schedules:</strong>
-			<ul>
-				<li ng-click="mb.selectSchedule($event)" ng-repeat="schedule in mb.loadedSchedules">
-					{{ schedule.name }}
-					<button ng-click="mb.deleteSchedule(schedule)" class="delete-icon">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-					</button>
-					<button ng-click="mb.displaySchedule(schedule)" class="delete-icon">
-						<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-					</button>
-				</li>
-			</ul>
-			<span class="action-buttons pull-right">
-				<button class="btn btn-danger" ng-click="mb.closeDialog('manage')">Cancel</button>
-			</span>
-		</div>
-	</div>
+    <div id="manage" class="alert alert-info" role="alert">
+        <div class="row alert-row">
+            <strong>Saved Schedules:</strong>
+            <ul>
+                <li ng-repeat="schedule in mb.loadedSchedules">
+                    {{ schedule.name }}
+                    <button ng-click="mb.deleteSchedule(schedule)" class="delete-icon">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    <button ng-click="mb.displaySchedule(schedule.CRNList)" class="delete-icon">
+                        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                    </button>
+                </li>
+            </ul>
+            <span class="action-buttons pull-right">
+                <button class="btn btn-danger" ng-click="mb.closeDialog('manage')">Cancel</button>
+            </span>
+        </div>
+    </div>
 
-	<div id="error" class="alert alert-danger" role="alert">
-		<div class="row alert-row">
-			<strong id="error-message">err msg</strong>
-		</div>
-	</div>
+    <div id="error" class="alert alert-danger" role="alert">
+        <div class="row alert-row">
+            <strong id="error-message">err msg</strong>
+        </div>
+    </div>
 
-	<div class="col-md-3">
-		<input label="Search Classes" class="form-control" placeholder="Department" ng-model="department"></input>
-		<input label="Search Classes" class="form-control" placeholder="Course Number" ng-model="number"></input>
+    <div resizeable ng-style="{height: windowHeight-100}" class="col-sm-3 manual-left">
+        <div class="manual-input">
+            <div class="input-label"><b>Add a Class:</b></div>
+            <input label="Search Classes" class="form-control" placeholder="ex. CS 125" ng-model="selectedCourse" uib-typeahead="course as course.shortName for course in mb.courses | filter:{'shortName':$viewValue} | limitTo:8" typeahead-on-select="mb.addCourse(selectedCourse)"></input>    
+        </div>    
+        <div class="manual-class" ng-repeat="selected in mb.selectedCourses">
+            <div class="class-header">
+                <b>{{ selected.shortName }}</b>
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': selected.open, 'glyphicon-chevron-right': !selected.open}" ng-click="selected.open=!selected.open" ></i>
+                <i class="pull-right glyphicon glyphicon-remove" ng-click="mb.removeCourse(selected)"></i>
+            </div>
+            
+            <ul class="class-sections" uib-collapse="!selected.open">
+                <li class="class-section-header">
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-3">Code</div>
+                        <div class="col-xs-3 col-sm-3">Days</div>
+                        <div class="col-xs-6 col-sm-6">Time</div>
+                    </div>
+                </li>
+                <li
+                    ng-repeat="section in selected.sections"
+                    class="class-section"
+                    ng-class="{'selected':section.active,'class-open':mb.isOpen(section),'class-closed':mb.isClosed(section)}"
+                    ng-click="mb.clickSection(section)"
+                    ng-mouseenter="mb.highlightSection(section)"
+                    ng-mouseleave="mb.unhighlightSection(section)"
+                >
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-3">{{ section.name }}</div>
+                        <div class="col-xs-3 col-sm-3">{{ section.dayString }}</div> 
+                        <div class="col-xs-6 col-sm-6">{{ section.start }} - {{ section.end }}</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--
+        <div class="manual-input">
+		    <input label="Search Classes" class="form-control" placeholder="Department" ng-model="department"></input>
+            <input label="Search Classes" class="form-control" placeholder="Course Number" ng-model="number"></input>
+        </div>
 		<div ng-repeat="course in mb.courses | filter:{'shortName': department+' '+number} | limitTo: 8">
 			<b>{{ course.shortName }} - {{ course.longName }}</b>
 			<br>
@@ -73,19 +112,12 @@
 				ng-class="{'selected': section.active}">
 				{{ section.name }}
 			</button>
-			<br><br>
-		</div>
+			<br>
+        </div>--!>
 	</div>
-	<div class="col-md-9">
-		<chartist id="chart" class="ct-chart ct-golden-section" chartist-data="mb.agenda.chartData" chartist-chart-options="mb.agenda.chartOptions" chartist-events="mb.agenda.chartEvents" chartist-chart-type="Line"></chartist>
-		<div class="active-course-indicator" ng-repeat="course in mb.courses | ActiveCoursesFilter">
-			<div disabled="disabled" class="clear-icon"
-				ng-mouseenter="mb.deleteCourse(course,true)"
-				ng-mouseleave="mb.undeleteCourse(course)"
-				ng-click="mb.deleteCourse(course,false)">
-				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-			</div>
-			{{ course.shortName }}
-		</div>
+    <div class="col-sm-9 manual-right">
+        <div>
+            <svg id="cal"></svg>
+        </div>
 	</div>
 </div>

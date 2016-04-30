@@ -1,1 +1,24 @@
-Let's see some scheedules!
+<div class="row">
+    <div class="col-xs-6 col-sm-4">
+        <div class="viewer-menu viewer-selector" ng-click="viewer.previousSchedules()">
+            <i class="glyphicon glyphicon-menu-left"></i>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4">
+        <div class="viewer-menu viewer-selector" ng-click="viewer.nextSchedules()">
+            <i class="glyphicon glyphicon-menu-right"></i>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <div class="viewer-menu">
+            <b>Schedules: {{viewer.minIndex}} - {{viewer.maxIndex}} of {{viewer.schedules.length}}</b>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div ng-repeat="i in [] | range:viewer.numCalendars" ng-click="viewer.clickSchedule($index)" ng-hide="viewer.hideCalendar($index)" class="col-xs-12 col-sm-3" on-finish-render="ngRepeatFinished">
+        <div class="schedule">
+            <svg id=schedule-{{$index}}></svg>
+        <div>
+    </div>
+</div>

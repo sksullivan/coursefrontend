@@ -5,14 +5,44 @@
         .module('scheedule')
         .service('AgendaModelService', AgendaModelService);
 
+    // Agenda Model Service
+    // ------------------
+    //
+    // Handles saving data between controllers.
+
     function AgendaModelService () {
         var ams = this;
 
         ams.init = function () {
-            ams.activeCourses = {};
-            ams.operationList = [];
-            ams.availableColorIndices = [0,1,2,3,4,5,6,7];
+            // List of CRNs of current active sections on manual builder
+            ams.activeSections = [];
+            // Current generated list of schedules from auto builder
+            ams.generatedSchedules = [];
         };
+
+        // Adds CRN to unique list 
+        ams.addActiveSection = function(CRN) {
+            ams.activeSections = ams.activeSections.filter(function(e) {
+                return e != CRN;
+            });
+            ams.activeSections.push(CRN);
+        };
+
+        ams.removeActiveSection = function(CRN) {
+            ams.activeSections = ams.activeSections.filter(function(e) {
+                return e != CRN;
+            });
+        };
+
+        ams.clearActiveSections = function() {
+            ams.activeSections = [];
+        }
+
+        ams.setGeneratedSchedule = function(schedules) {
+            ams.generatedSchedules = schedules;
+        }
+
+        /*
 
         ams.verifyOperation = function (operation) {
             if (operation.type == "add") {
@@ -174,7 +204,8 @@
         ams.isNumeric = function (num) {
             return !isNaN(parseFloat(num)) && isFinite(num);
         };
-
+        
+        */
         ams.init();
     }
 })();

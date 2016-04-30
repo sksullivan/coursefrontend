@@ -3,18 +3,19 @@
 
 	angular
 		.module('scheedule')
-		.controller('ManualBuilderController', ['$scope','$rootScope','$filter','AuthService','CourseDataService', 'AgendaService', ManualBuilderController]);
+		.controller('ManualBuilderController', ['$scope','$rootScope','$filter','AuthService','CourseDataService', 'd3CalendarService','AgendaModelService', ManualBuilderController]);
 
 	// Manual Agenda Builder Controller
 	// ----------------
 	//
 	// Coordinates creating of agenda view, course selection accordions,
 	// course searching and agenda/accordion interactions.
-	function ManualBuilderController ($scope, $rootScope, $filter, AuthService, CourseDataService, AgendaService) {
+	function ManualBuilderController ($scope, $rootScope, $filter, AuthService, CourseDataService, d3CalendarService, AgendaModelService) {
 		var mb = this;
 		mb.init = function () {
 			console.log("Loaded manual builder controller.");
-			mb.courses = [];
+            mb.courses = [];
+            mb.selectedCourses = [];
 			mb.dialogs = {
 				save: false,
 				saveSuccess: false,
@@ -27,12 +28,7 @@
 			// Load courses from Course Data Service.
 			CourseDataService.getCourses(function (someCourses) {
 				console.log("PROCESSING Courses");
-				console.log(someCourses);
-				$scope.$apply(function(){
-					for (var course of someCourses) {
-						mb.courses.push(course);
-					}
-				});
+                mb.courses = someCourses;
 
 			}, function (err) {
 				console.log("Couldn't load course data from backend.");
@@ -53,41 +49,91 @@
 				mb.loadSchedules(function () {
 					mb.openDialog("manage");
 				});
-			});
-
-			// Initialize blank agenda.
-			mb.agenda = AgendaService.blankAgenda();
+			});;
+            
+            // Create d3Calendar object
+            mb.calendar = d3CalendarService.createCalendar(document.getElementById('cal'));
+            
+            // Load events from model service
+            mb.displaySchedule(AgendaModelService.activeSections);
+          
+            // Set resize event
+            d3.select(window).on('resize', mb.calendar.resize);
 		};
 
-		mb.searchQueryChanged = function (newDep, newNum) {
-			mb.searchResults = $filter('filter')(mb.courses,{'shortName': newDep+' '+newNum});
-		};
+        // Used in check for ng-class for section
+        mb.isOpen = function (section) {
+            if (section.enrollmentStatus.substring(0,4) == "Open" && !section.active)
+                return true;
+            return false;
+        }
+ 
+        // Used in check for ng-class for section
+        mb.isClosed = function (section) {
+            if (section.enrollmentStatus.substring(0,6) == "Closed" && !section.active)
+                return true;
+            return false;
+        }
+
+        // Fired upon selecting a class from dropdown
+        mb.addCourse = function (selectedCourse) {
+            // Filter from list of courses so that selected course no longer appears
+            mb.courses = mb.courses.filter(function(e) {
+                return selectedCourse.shortName != e["shortName"];
+            });
+            mb.selectedCourses.push(selectedCourse);
+        };
+
+        // Fired upon clicking remove glyph on course
+        mb.removeCourse = function (selectedCourse) {
+            mb.selectedCourses = mb.selectedCourses.filter(function(e) {
+                return selectedCourse.shortName != e["shortName"];
+            });
+            // Return course back to coursse list
+            mb.courses.push(selectedCourse);
+        };
 
 		// Fired upon clicking a section.
 		mb.clickSection = function (section) {
+            // Add or Remove events from calendar and model service
 			if (section.active) {
-				// If we're clicking a selected section, clear its active flag.
-				// Then remove it from the calendar, and return it to the
-				// mouseentered state.
+				// Selection no longer appears highlighted  
 				section.active = false;
-				mb.agenda.removeSeriesForSection(section);
+				AgendaModelService.removeActiveSection(section.id);
+                mb.calendar.removeSection(section.id);
+                // Rehighlight selection after event removal
 				mb.highlightSection(section);
 			} else {
-				// If we clicked an unselected section, exit the mouseentered
-				// state. Set its active flag and add it to the agenda.
 				mb.unhighlightSection(section);
+                // Selection appears highlighted
 				section.active = true;
-				mb.agenda.addNormalSeriesForSection(section);
+				AgendaModelService.addActiveSection(section.id);
+                mb.calendar.addClass({
+                    classId: section.courseId,
+                    sectionId: section.id,
+                    start: section.startMoment,
+                    end: section.endMoment,
+                    meetingTimes: section.days,
+                    content: section.name,
+                    hovering: section.hovering
+                });
 			}
 		};
 
 		// Fired when the mosueenter event occurs on a section.
 		mb.highlightSection = function (section) {
-			// Only add the translucent hover section to the agenda if the section
-			// isn't already selected.
+			// Only add the translucent hover section to the agenda if the section isn't already selected.
 			if (!section.active) {
 				section.hovering = true;
-				mb.agenda.addHoverSeriesForSection(section);
+				mb.calendar.addClass({
+                    classId: section.courseId,
+                    sectionId: section.id,
+                    start: section.startMoment,
+                    end: section.endMoment,
+                    meetingTimes: section.days,
+                    content: section.name,
+                    hovering: section.hovering
+                });
 			}
 		};
 
@@ -97,34 +143,12 @@
 			// already being hovered over (i.e. prevent removing selected sections).
 			if (section.hovering) {
 				section.hovering = false;
-				mb.agenda.removeSeriesForSection(section);
+				mb.calendar.removeSection(section.id);
 			}
+            
 		};
 
-		mb.deleteCourse = function (course, shouldHover) {
-			for (var section of course.sections) {
-				if (section.active || section.hovering) {
-					section.active = false;
-					section.hovering = false;
-					mb.agenda.removeSeriesForSection(section);
-					if (shouldHover) {
-						section.hovering = true;
-						mb.highlightSection(section);
-					}
-				}
-			}
-		};
-
-		mb.undeleteCourse = function (course) {
-			for (var section of course.sections) {
-				if (section.hovering) {
-					mb.unhighlightSection(section);
-					section.active = true;
-					mb.agenda.addNormalSeriesForSection(section);
-				}
-			}
-		};
-
+        // Delete a schedule from the manager and reload schedules
 		mb.deleteSchedule = function (schedule) {
 			CourseDataService.deleteSchedule(schedule, function () {
 				mb.loadSchedules();
@@ -139,11 +163,14 @@
 		mb.saveSchedule = function () {
 			console.log("Saving schedule...");
 			mb.closeDialog('save');
-			var CRNList = [];
+			var CRNList = AgendaModelService.activeSections;
 			// Grab the active section from our list of courses.
+            /*
 			for (var CRN of $filter('ActiveCRNFilter')(mb.courses)) {
 				CRNList.push(CRN);
 			}
+            */
+
 			// Send that list off to the API.
 			CourseDataService.saveSchedule(CRNList,mb.scheduleTitle,function () {
 				console.log("Saved schedule.");
@@ -167,6 +194,14 @@
 		mb.loadSchedules = function (handleLoadedSchedules) {
 			console.log("Loading schedules...");
 			// Get the list of schedules from the API.
+            mb.loadedSchedules = [
+                {
+                    name: "durr",
+                    CRNList: [11111,54321,66666]
+                }       
+            ];
+            handleLoadedSchedules();
+            /*
 			CourseDataService.loadSchedules(function (schedules) {
 				console.log("Loaded schedules.");
 				// Throw the data we got back from the API into the list of possible
@@ -182,14 +217,20 @@
 				console.log(err);
 				mb.showError("Error loading schedules.",err);
 			});
+            */
 		};
 
 		// Display a selected, loaded schedule into our calendar.
-		mb.displaySchedule = function (schedule) {
-			mb.agenda = AgendaService.blankAgenda();
+		mb.displaySchedule = function (CRNList) {
+            mb.calendar.clearClasses(); 
+            for (var courseIndex = 0; courseIndex < mb.courses.length; courseIndex++) {
+                for (var sectionIndex = 0; sectionIndex < mb.courses[courseIndex].sections.length; sectionIndex++) {
+                    mb.courses[courseIndex].sections[sectionIndex].active = false;
+                }
+            }
+            AgendaModelService.clearActiveSections();
 			// Get the list of CRNs for the selected schedule (this index is set 
 			// in the ng-click listener for schedule-names)
-			var CRNList = schedule.CRNList;
 			var activatedSections = [];
 			// Iterate through all CRNs in our list.
 			for (var crnIndex = 0; crnIndex < CRNList.length; crnIndex++) {
@@ -198,17 +239,41 @@
 					for (var sectionIndex = 0; sectionIndex < mb.courses[courseIndex].sections.length; sectionIndex++) {
 						// If the section we're looking at is on our list of CRNs, add it to our calendar.
 						// Also add it 
-						if (CRNList[crnIndex] == mb.courses[courseIndex].sections[sectionIndex].id && !activatedSections.includes(mb.courses[courseIndex].sections[sectionIndex])) {
-							mb.agenda.addNormalSeriesForSection(mb.courses[courseIndex].sections[sectionIndex]);
-							mb.courses[courseIndex].sections[sectionIndex].active = true;
-							activatedSections.push(mb.courses[courseIndex].sections[sectionIndex]);
+						if (CRNList[crnIndex] == mb.courses[courseIndex].sections[sectionIndex].id) {
+				            var section = mb.courses[courseIndex].sections[sectionIndex];
+                            mb.unhighlightSection(section);
+                            // Set the sections to appear highlighted
+                            section.active = true;
+                            AgendaModelService.addActiveSection(section.id);
+                            mb.calendar.addClass({
+                                classId: section.courseId,
+                                sectionId: section.id,
+                                start: section.startMoment,
+                                end: section.endMoment,
+                                meetingTimes: section.days,
+                                content: section.name,
+                                hovering: section.hovering
+                            });
+                            
+                            // Generate selected course list
+                            if (mb.selectedCourses.indexOf(mb.courses[courseIndex]) === -1)
+                                mb.selectedCourses.push(mb.courses[courseIndex]);
 						}
 					}
 				}
 			}
+
+            // Remove selection options from course list
+            for (var selectedCourse of mb.selectedCourses) {
+                mb.courses = mb.courses.filter(function(e) {
+                    return selectedCourse.shortName != e["shortName"];
+                });
+            }
+
 			mb.closeDialog("manage");
 		}
 
+        /*
 		mb.selectSchedule = function (event) {
 			var selectedScheduleName = event.target.innerHTML;
 			if (selectedScheduleName != "") {
@@ -221,6 +286,7 @@
 				}
 			}
 		};
+        */
 
 		mb.hideAllDialogs = function () {
 			$('#save').hide();

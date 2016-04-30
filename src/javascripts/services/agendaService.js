@@ -19,9 +19,7 @@
 		// Initialize service. Set displayed hour range.
 		// Create functions on chart objects and initialize
 		// chart data.
-		as.init = function () {
-			as.initChartData();
-			as.initChartFunctions();    
+		as.init = function () {  
 		};
 
 		// Add functions to calendar object returned by service.

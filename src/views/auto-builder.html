@@ -1,1 +1,38 @@
-The new and improved way to schedule classes!
+<div class="row">
+    <div class="col-md-3 col-md-offset-3">
+        <div class="auto-selection">
+            <b>Add a Class:</b>
+            <div class="auto-input">
+                <input label="Search Classes" class="form-control" placeholder="ex. CS 125" ng-model="selectedCourse" uib-typeahead="course as course.shortName for course in ab.courses | filter:{'shortName':$viewValue} | limitTo:8" typeahead-on-select="ab.addCourse(selectedCourse)"></input>
+            </div>
+            <div ng-repeat="selected in ab.selectedCourses">
+                {{ selected.shortName }}
+                <i class="pull-right glyphicon glyphicon-remove" style="cursor:pointer" ng-click="ab.removeCourse(selected)"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="">
+            <div class="">
+                <div range-slider="" step="1" min="0" max="100" model-min="min" model-max="max"></div>
+            </div>
+            <div class="btn-group">
+                <label class="btn btn-primary" ng-model="organization" uib-btn-radio="'Clustered'">Clustered</label>
+                <label class="btn btn-primary" ng-model="organization" uib-btn-radio="'Scattered'">Scattered</label> 
+            </div>
+            <div style="margin-top:10px;">
+                <button class="button btn btn-default pull-right" ng-click="ab.generateSchedules()">Generate</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loading" class="row" style="margin-top:10px">
+    <div class="col-md-6 col-md-offset-3">
+        <uib-progressbar class="progress-striped active" type="info" max="100" value="100">Generating Classes</uib-progressbar>
+    </div>
+</div>
+<div id="finish" class="row" style="margin-top:10px">
+    <div class="col-md-6 col-md-offset-3">
+        <uib-progressbar class="progress-striped" type="success" max="100" value="100">Finished</uib-progressbar>
+    </div>
+</div>

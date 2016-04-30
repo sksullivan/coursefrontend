@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    var scheedule = angular.module('scheedule', ['ngRoute','ngResource','ngRoute','ui.bootstrap', 'angular-chartist', 'angular.filter']);
+    var scheedule = angular.module('scheedule', ['ngRoute','ngResource','ngRoute','ui.bootstrap','ngAnimate','angular.filter','ui-rangeSlider']);
     console.log("Initialized Scheedule2 Angular.js application.");
 
     scheedule.config(['$routeProvider','$locationProvider', function ($routeProvider,$locationProvider) {

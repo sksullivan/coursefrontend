@@ -13,6 +13,56 @@ div.toolbar-buttons {
 }
 
 div.toolbar-signin-button {
-	line-height: 50px;
-	float: right;
+	/*line-height: 50px;
+	float: right;*/
+}
+
+.navbar {
+    border-radius: 0px !important;
+}
+
+.nav {
+    height: 50px;
+        
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-inverse .nav-pills > li > a {
+    color: #e2e2e2;
+}
+
+.navbar-inverse .nav-pills > li > a:hover, .navbar-inverse .nav-pills > li > a:focus{
+    background-color: #333333;
+}
+
+.nav-pills .open>a, .nav-pills .open>a:active, .nav-pills .open>a:focus{
+    background-color: #333333 !important;
+}
+
+.navbar-collapse.in {
+    overflow-y: hidden;
+}
+
+a[ng-click] {
+    cursor: pointer;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #ccc;
+	color: #737373;
+    font-size: 12px;
+}
+
+.footer a {
+    cursor: pointer;
+    color: #737373;
+}
+
+.footer a:hover {
+    color: #737373;
 }

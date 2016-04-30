@@ -3,17 +3,14 @@
   "version": "0.0.0",
   "description": "Scheedule's second coming.",
   "author": "Multiple",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "gulp": "*",
-    "gulp-concat": "*",
-    "gulp-ng-annotate": "*",
+    "del": "*",
+    "gulp": "^3.9.1",
     "gulp-closure-compiler": "*",
+    "gulp-concat": "*",
     "gulp-docco": "*",
-    "del": "*"
+    "gulp-ng-annotate": "*"
   },
-  
-  
   "license": "MIT"
 }

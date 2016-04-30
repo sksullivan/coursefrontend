@@ -4,6 +4,12 @@
     angular
         .module('scheedule')
         .service('CourseDataService', ['$http', CourseDataService]);
+    
+    // Course Data Service
+    // ---------------
+    //
+    // Contains functions for api calls to the backend for
+    // course information, course scheduling and schedule saving;
 
     function CourseDataService ($http) {
         var cds = this;
@@ -13,22 +19,34 @@
             cds.timeFormat = "hh:mm a";
         }
 
+        //Takes two function callback; one with a parameter containing the course
+        //data and one for errors
         cds.getCourses = function (processPartialCourses, processErr) {
-            if (window.courseArray !== undefined) {
-                processPartialCourses(window.courseArray);
+            // Skips formatting if courses already processed
+            if (cds.formattedCourses !== undefined) {
+                console.log("Using formatted data");
+                processPartialCourses(cds.formattedCourses);
             } else {
-                window.courseArrayCallback = function (courses) {
-                    cds.tempCourseData = courses;
-                    cds.courseToProcessIndex = 0;
+                // Process data if GET request finished before call
+                if (window.courseArray !== undefined) {
+                    console.log("Using courseArray");
+                    cds.tempCourseData = window.courseArray;
                     cds.formatCourseArray(processPartialCourses);
-                };
-                // $http.get('/api/prx/course/all').then(function (courses) {
-                //     cds.tempCourseData = courses.data;
-                //     cds.courseToProcessIndex = 0;
-                //     cds.formatCourseArray(processPartialCourses);
-                // }, function (err) {
-                //     processErr(err);
-                // });
+                } else {
+                    // Set function for GET request callback
+                    window.courseArrayCallback = function (courses) {
+                        console.log("Using courseArrayCallback");
+                        cds.tempCourseData = courses;
+                        cds.formatCourseArray(processPartialCourses);
+                    };
+                    // $http.get('/api/prx/course/all').then(function (courses) {
+                    //     cds.tempCourseData = courses.data;
+                    //     cds.courseToProcessIndex = 0;
+                    //     cds.formatCourseArray(processPartialCourses);
+                    // }, function (err) {
+                    //     processErr(err);
+                    // });
+                }
             }
         };
 
@@ -91,6 +109,7 @@
                 }
                 formattedCourses.push(formattedCourse);
             }
+            cds.formattedCourses = formattedCourses;
             partialCompletionCallback(formattedCourses);
         };
 
@@ -106,9 +125,13 @@
                         courseId: course.shortName,
                         courseName: course.shortName,
                         name: section.code,
+                        start: meeting.start,
+                        end: meeting.end,
                         startMoment: startDate,
                         endMoment: endDate,
                         days: days,
+                        dayString: meeting.days,
+                        enrollmentStatus: section.enrollmentStatus,
                         active: false,
                         hovering: false
                     };
@@ -126,15 +149,15 @@
             for (var letterIndex = 0; letterIndex < initialString.length; letterIndex++) {
                 var dayInitial = initialString.charAt(letterIndex);
                 if (dayInitial == 'M') {
-                    days.push(0);
+                    days.push("Monday");
                 } else if (dayInitial == 'T') {
-                    days.push(1);
+                    days.push("Tuesday");
                 } else if (dayInitial == 'W') {
-                    days.push(2);
+                    days.push("Wednesday");
                 } else if (dayInitial == 'R') {
-                    days.push(3);
+                    days.push("Thursday");
                 } else if (dayInitial == 'F') {
-                    days.push(4);
+                    days.push("Friday");
                 }
             }
             return days;

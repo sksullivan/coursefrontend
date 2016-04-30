@@ -1,11 +1,63 @@
+.manual-body {
+}
+
+.manual-left {
+    overflow-y: auto;
+}
+
+.manual-right {
+}
+
 .selected {
-	background-color: #36C !important;
-	color: white !important;
+	background-color: #c6c8ca;
+}
+
+.manual-input {
+}
+
+.input-label {
+    margin-bottom: 5px;
+}
+
+.manual-class {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+}
+
+.class-header {
+    border-bottom: 1px solid #ccc;
+}
+
+.class-header>i {
+    cursor: pointer;
+}
+
+.class-sections {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.class-section-header {
+    border-bottom: 1px solid #ccc;
+}
+
+.class-section:hover {
+	background-color: #c6c8ca;
 }
 
 .row.alert-row {
 	margin-right: 0px;
 	margin-left: 0px;
+}
+
+.class-open {
+    background-color: #ccffcc;
+}
+
+.class-closed {
+    background-color: #ffcccc;
 }
 
 .animate-hide {
@@ -101,4 +153,28 @@ div.clear-icon {
 .agenda-fade-out {
 	opacity: 0.0;
 	animation: hide 0.3s ease 1;
+}
+
+#cal .axis text {
+    font: 10px sans-serif;
+}
+
+#cal .axis path,
+#cal .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+#cal .x.axis path {
+    display: none;
+}
+
+#cal .tick text {
+    font-size: 12px;
+}
+
+#cal .y.axis path,
+#cal .tick line {
+    opacity: 0.2;
 }
